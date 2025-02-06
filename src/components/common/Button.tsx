@@ -2,7 +2,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-const button = cva(['font-semibold', 'rounded-[8px]', 'p-2'], {
+const button = cva(['font-semibold', 'rounded-[10px]', 'p-2'], {
   variants: {
     intent: {
       primary: ['bg-red-550', 'text-white', 'hover:bg-red-hover'],
