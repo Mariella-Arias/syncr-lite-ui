@@ -6,7 +6,7 @@ import Button from '../../components/common/Button';
 const SignupPage = () => {
   return (
     <div className="flex justify-center">
-      <div className="border-input-border border-1 shadow-md w-[400px] flex flex-col px-12 py-10 items-center gap-3 rounded-[10px]">
+      <div className="translate-y-1/8 border-input-border border-1 shadow-md w-[400px] flex flex-col px-12 py-10 items-center gap-3 rounded-[10px]">
         <img src={logo} className="mb-7 p-3" />
         <p className="font-nunito text-3xl font-bold">Create your account</p>
         <form className="flex flex-col w-full gap-2 mb-3">
