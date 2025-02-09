@@ -3,7 +3,21 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
-const LoginForm = () => {
+interface ILoginCredentials {
+  email: string;
+  password: string;
+}
+
+const LoginForm = ({
+  handleLogin,
+}: {
+  handleLogin: (credentials: ILoginCredentials) => Promise<void>;
+}) => {
+  const initialValues: ILoginCredentials = {
+    email: '',
+    password: '',
+  };
+
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string().required('Password is required'),
@@ -11,13 +25,16 @@ const LoginForm = () => {
 
   return (
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={initialValues}
       validationSchema={LoginSchema}
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={(values, { setSubmitting }) => {
-        console.log(`VALUES: ${JSON.stringify(values)}`);
-        setSubmitting(false);
+      onSubmit={async (values, { setSubmitting }) => {
+        try {
+          await handleLogin(values);
+        } finally {
+          setSubmitting(false);
+        }
       }}
     >
       {({ isSubmitting }) => (
@@ -40,16 +57,21 @@ const LoginForm = () => {
               type="password"
               name="password"
               placeholder="Password"
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg relative"
+              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
               name="password"
-              component="span"
+              component="div"
               className="text-red-550 text-sm"
             />
           </div>
 
-          <Button size="medium" disabled={isSubmitting} className="box-border">
+          <Button
+            type="submit"
+            size="medium"
+            disabled={isSubmitting}
+            className="box-border"
+          >
             <span className="text-lg">
               {isSubmitting ? (
                 <svg
