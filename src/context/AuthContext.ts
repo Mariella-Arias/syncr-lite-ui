@@ -1,8 +1,12 @@
 import { useContext, createContext } from 'react';
 
+import { ILoginCredentials } from '../features/auth/types/auth.types';
+
 interface IAuthContext {
   isAuthenticated: boolean;
-  checkAuthStatus: () => void;
+  checkAuthStatus: () => Promise<void>;
+  login: (credentials: ILoginCredentials) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<IAuthContext | undefined>(undefined);
