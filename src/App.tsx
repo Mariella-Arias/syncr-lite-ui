@@ -7,8 +7,8 @@ import ActivatePage from './pages/auth/ActivatePage';
 import VerifySignupPage from './pages/auth/VerifySignupPage';
 import ResetPasswordConfirmPage from './pages/auth/ResetPasswordConfirmPage';
 import AppLayout from './components/layout/AppLayout';
+import DashboardPage from './pages/dashboard/DashboardPage';
 
-import PublicRoute from './routes/PublicRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
 
 import { AuthProvider } from './context/AuthProvider';
@@ -19,10 +19,7 @@ function App() {
     { path: '/signup', element: <SignupPage /> },
     { path: '/activate/:uid/:token', element: <ActivatePage /> },
     { path: '/reset-password', element: <ResetPasswordPage /> },
-    {
-      element: <PublicRoute />,
-      children: [{ path: '/login', element: <LoginPage /> }],
-    },
+    { path: '/login', element: <LoginPage /> },
     {
       path: '/password/reset/confirm/:uid/:token',
       element: <ResetPasswordConfirmPage />,
@@ -33,7 +30,7 @@ function App() {
         {
           element: <AppLayout />,
           children: [
-            { path: '/', element: <div>DASHBOARD TAB</div> },
+            { path: '/', element: <DashboardPage /> },
             { path: '/planner', element: <div>PLANNER TAB</div> },
             { path: '/activity', element: <div>ACTIVITY TAB</div> },
           ],
