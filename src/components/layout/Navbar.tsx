@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router';
+
 import logo from '../../assets/logo.png';
 
 const UserIcon = () => {
@@ -20,18 +21,48 @@ const UserIcon = () => {
   );
 };
 
+const ChevronIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="size-4"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+      />
+    </svg>
+  );
+};
+
 const Navbar = () => {
   const location = useLocation();
 
   return (
-    <div className="flex flex-wrap items-center md:flex-row justify-between  p-2 w-full">
-      <img src={logo} className="w-48" />
-      <div className="border-input-border border-1 w-45 p-2 md:order-last">
-        <UserIcon />
+    <div className="w-full p-2 mb-2 flex flex-wrap md:flex-nowrap items-center justify-between overflow-hidden">
+      {/* small screens */}
+      <div className="flex w-full items-center justify-between md:w-fit">
+        <img
+          src={logo}
+          className="w-40 h-10 md:w-48 md:h-12 transition duration-300 ease-in-out"
+          alt="Logo"
+        />
+        <div className="bg-[#F6F6F6] p-3 md:hidden flex items-center gap-2">
+          <span className="hidden">
+            <UserIcon />
+          </span>
+          <p>email@email.com</p>
+          <ChevronIcon />
+        </div>
       </div>
 
-      <div className="flex justify-center w-full mt-4 md:mt-0 md:justify-start md:w-auto">
-        <div className="flex gap-3">
+      <div className="order-last flex-grow w-full md:order-none md:w-auto md:flex-grow-0">
+        <div className="flex justify-center gap-3">
           <Link
             to="/"
             className={`text-2xl hover:font-semibold ${
@@ -40,7 +71,6 @@ const Navbar = () => {
           >
             DASHBOARD
           </Link>
-
           <Link
             to="/planner"
             className={`text-2xl hover:font-semibold ${
@@ -58,6 +88,13 @@ const Navbar = () => {
             ACTIVITY
           </Link>
         </div>
+      </div>
+
+      {/* large screens */}
+      <div className="hidden bg-[#F6F6F6] p-3 md:flex items-center gap-2 md:w-fit">
+        <UserIcon />
+        <p>email@email.com</p>
+        <ChevronIcon />
       </div>
     </div>
   );
