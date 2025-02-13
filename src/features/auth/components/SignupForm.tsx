@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -17,8 +16,6 @@ const SignupForm = ({
 }: {
   handleSubmit: (values: IUserProfile) => Promise<void>;
 }) => {
-  const navigate = useNavigate();
-
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
@@ -50,16 +47,13 @@ const SignupForm = ({
       validationSchema={SignupSchema}
       validateOnChange={false}
       validateOnBlur={false}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
           await handleSubmit(values);
           // TODO add success notification
-        } catch (error) {
-          console.log('Error creating user', error);
-          // TODO add error notification
         } finally {
-          navigate('/login', { replace: true });
           setSubmitting(false);
+          resetForm();
         }
       }}
     >
@@ -131,7 +125,7 @@ const SignupForm = ({
                 className="text-red-550 text-sm"
               />
             </div>
-            <Button size="medium" disabled={isSubmitting}>
+            <Button type="submit" size="medium" disabled={isSubmitting}>
               <div className="flex items-center justify-center h-full w-full">
                 {isSubmitting ? (
                   <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
