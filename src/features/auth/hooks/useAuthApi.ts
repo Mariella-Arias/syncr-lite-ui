@@ -31,7 +31,17 @@ export const useAuthApi = () => {
     }
   };
 
-  const activate = async ({
+  const createAccount = async (data: Record<string, string>) => {
+    try {
+      await api.post('auth/users/', data);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
+  const activateAccount = async ({
     uid,
     token,
   }: {
@@ -65,5 +75,32 @@ export const useAuthApi = () => {
     }
   };
 
-  return { login, logout, activate, initiatePasswordReset, resetPassword };
+  // const changePassword = async (data: Record<string, string | undefined>) => {
+  //   try {
+  //     await api.post('auth/users/set_password/', data);
+  //   } catch (err: unknown) {
+  //     if (err instanceof AxiosError) {
+  //       throw handleApiError(err);
+  //     }
+  //   }
+  // };
+
+  // const deleteAccount = async (data: Record<string, string | undefined>) => {
+  //   try {
+  //     await api.delete('auth/users/me/', data);
+  //   } catch (err: unknown) {
+  //     if (err instanceof AxiosError) {
+  //       throw handleApiError(err);
+  //     }
+  //   }
+  // };
+
+  return {
+    createAccount,
+    activateAccount,
+    login,
+    logout,
+    initiatePasswordReset,
+    resetPassword,
+  };
 };

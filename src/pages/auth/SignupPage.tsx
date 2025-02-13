@@ -1,26 +1,34 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { AxiosError } from 'axios';
 
 import logo from '../../assets/logo.png';
 import SignupForm, {
   IUserProfile,
 } from '../../features/auth/components/SignupForm';
-import api, { handleApiError } from '../../services/api';
+import { handleApiError } from '../../services/api';
+import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
 
 const SignupPage = () => {
+  const { createAccount } = useAuthApi();
+  const navigate = useNavigate();
+
   const handleSignup = async (values: IUserProfile) => {
     try {
-      await api.post('auth/users/', {
+      await createAccount({
         email: values.email,
         first_name: values.firstName,
         last_name: values.lastName,
         password: values.password,
         re_password: values.rePassword,
       });
+      // TODO add success notification
     } catch (err: unknown) {
+      // TODO add error notification
       if (err instanceof AxiosError) {
         throw handleApiError(err);
       }
+    } finally {
+      navigate('/login', { replace: true });
     }
   };
 
