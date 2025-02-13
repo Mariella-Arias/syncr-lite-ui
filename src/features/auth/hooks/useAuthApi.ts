@@ -48,8 +48,10 @@ export const useAuthApi = () => {
   }) => {
     try {
       await authApi.activateAccount({ uid, token });
-    } catch {
-      console.log('ERROR VERIFYING');
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
     }
   };
 
@@ -73,6 +75,16 @@ export const useAuthApi = () => {
     }
   };
 
+  const deleteAccount = async (data: Record<string, string>) => {
+    try {
+      await authApi.deleteAccount(data);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
   return {
     createAccount,
     activateAccount,
@@ -80,5 +92,6 @@ export const useAuthApi = () => {
     logout,
     initiatePasswordReset,
     resetPassword,
+    deleteAccount,
   };
 };
