@@ -24,9 +24,7 @@ const ResetPasswordPage = () => {
               navigate('/login', { replace: true });
             } catch (err: unknown) {
               // TODO add error notification
-              if (err instanceof AxiosError) {
-                throw handleApiError(err);
-              }
+              console.log(err);
             }
           }}
         />
