@@ -45,5 +45,25 @@ export const useAuthApi = () => {
     }
   };
 
-  return { login, logout, activate };
+  const initiatePasswordReset = async (username: Record<string, string>) => {
+    try {
+      await api.post('auth/users/reset_password/', username);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
+  const resetPassword = async (data: Record<string, string | undefined>) => {
+    try {
+      await api.post('auth/users/reset_password_confirm/', data);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
+  return { login, logout, activate, initiatePasswordReset, resetPassword };
 };
