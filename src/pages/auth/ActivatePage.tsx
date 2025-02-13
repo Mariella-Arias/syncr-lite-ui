@@ -9,7 +9,7 @@ const ActivatePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { uid, token } = useParams();
   const navigate = useNavigate();
-  const { activate } = useAuthApi();
+  const { activateAccount } = useAuthApi();
 
   return (
     <div className="flex justify-center">
@@ -27,7 +27,7 @@ const ActivatePage = () => {
           onClick={async () => {
             setIsLoading(true);
             try {
-              await activate({ uid, token });
+              await activateAccount({ uid, token });
               navigate('/login');
             } catch {
               console.log('ERROR VERIFYING');
