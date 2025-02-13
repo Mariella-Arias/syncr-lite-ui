@@ -44,7 +44,7 @@ const LoginPage = () => {
         <img src={logo} className="mb-7 p-3" />
         <p className="font-nunito text-3xl font-bold">Welcome back</p>
         <LoginForm
-          handleLogin={async (credentials: ILoginCredentials) => {
+          handleLogin={async (credentials: Record<string, string>) => {
             try {
               await login(credentials);
             } catch (err: unknown) {

@@ -3,17 +3,12 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
-interface ILoginCredentials {
-  email: string;
-  password: string;
-}
-
 const LoginForm = ({
   handleLogin,
 }: {
-  handleLogin: (credentials: ILoginCredentials) => Promise<void>;
+  handleLogin: (credentials: Record<string, string>) => Promise<void>;
 }) => {
-  const initialValues: ILoginCredentials = {
+  const initialValues = {
     email: '',
     password: '',
   };

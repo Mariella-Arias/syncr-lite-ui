@@ -1,16 +1,15 @@
 import { AxiosError } from 'axios';
 
-import api from '../../../services/api';
-import { ILoginCredentials } from '../types/auth.types';
+import authApi from '../api/authApi';
 import { handleApiError } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 
 export const useAuthApi = () => {
   const { checkAuthStatus } = useAuth();
 
-  const login = async (credentials: ILoginCredentials) => {
+  const login = async (credentials: Record<string, string>) => {
     try {
-      await api.post('token/', credentials);
+      await authApi.login(credentials);
       await checkAuthStatus();
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
@@ -21,9 +20,8 @@ export const useAuthApi = () => {
 
   const logout = async () => {
     try {
-      await api.post('api/token/blacklist/');
+      await authApi.logout();
       await checkAuthStatus();
-      console.log('Logged out successfully');
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);
@@ -33,7 +31,7 @@ export const useAuthApi = () => {
 
   const createAccount = async (data: Record<string, string>) => {
     try {
-      await api.post('auth/users/', data);
+      await authApi.createAccount(data);
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);
@@ -49,7 +47,7 @@ export const useAuthApi = () => {
     token: string | undefined;
   }) => {
     try {
-      await api.post('auth/users/activation/', { uid, token });
+      await authApi.activateAccount({ uid, token });
     } catch {
       console.log('ERROR VERIFYING');
     }
@@ -57,7 +55,7 @@ export const useAuthApi = () => {
 
   const initiatePasswordReset = async (username: Record<string, string>) => {
     try {
-      await api.post('auth/users/reset_password/', username);
+      await authApi.initiatePasswordReset(username);
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);
@@ -67,33 +65,13 @@ export const useAuthApi = () => {
 
   const resetPassword = async (data: Record<string, string | undefined>) => {
     try {
-      await api.post('auth/users/reset_password_confirm/', data);
+      await authApi.resetPassword(data);
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);
       }
     }
   };
-
-  // const changePassword = async (data: Record<string, string | undefined>) => {
-  //   try {
-  //     await api.post('auth/users/set_password/', data);
-  //   } catch (err: unknown) {
-  //     if (err instanceof AxiosError) {
-  //       throw handleApiError(err);
-  //     }
-  //   }
-  // };
-
-  // const deleteAccount = async (data: Record<string, string | undefined>) => {
-  //   try {
-  //     await api.delete('auth/users/me/', data);
-  //   } catch (err: unknown) {
-  //     if (err instanceof AxiosError) {
-  //       throw handleApiError(err);
-  //     }
-  //   }
-  // };
 
   return {
     createAccount,

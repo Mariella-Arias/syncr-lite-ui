@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useNavigate } from 'react-router';
 
 import logo from '../../assets/logo.png';
 import ResetPasswordForm from '../../features/auth/components/ResetPasswordForm';
@@ -9,6 +9,7 @@ import { handleApiError } from '../../services/api';
 const ResetPasswordConfirmPage = () => {
   const { resetPassword } = useAuthApi();
   const { uid, token } = useParams();
+  const navigate = useNavigate();
 
   const handleResetPassword = async (values: Record<string, string>) => {
     const body = {
@@ -19,9 +20,10 @@ const ResetPasswordConfirmPage = () => {
     };
     try {
       await resetPassword(body);
+      navigate('/', { replace: true });
       // TODO add success notification
     } catch (err: unknown) {
-      // TODO add error notification
+      // TODO add error notification and option to re send reset link
       if (err instanceof AxiosError) {
         throw handleApiError(err);
       }
