@@ -1,11 +1,9 @@
 import { Link, useNavigate } from 'react-router';
-import { AxiosError } from 'axios';
 
 import logo from '../../assets/logo.png';
 import SignupForm, {
   IUserProfile,
 } from '../../features/auth/components/SignupForm';
-import { handleApiError } from '../../services/api';
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
 
 const SignupPage = () => {
@@ -24,9 +22,7 @@ const SignupPage = () => {
       // TODO add success notification
     } catch (err: unknown) {
       // TODO add error notification
-      if (err instanceof AxiosError) {
-        throw handleApiError(err);
-      }
+      console.log(err);
     } finally {
       navigate('/login', { replace: true });
     }
