@@ -35,7 +35,7 @@ const ResetPasswordConfirmPage = () => {
       <div className="translate-y-1/8 border-input-border border-1 shadow-md w-[400px] flex flex-col px-12 py-10 items-center gap-3 rounded-[10px]">
         <img src={logo} className="mb-7 p-3" />
         <p className="font-nunito text-3xl font-bold">Reset your password</p>
-        <p>Enter a new email below to change your password.</p>
+        <p>Enter a new password below to change your password.</p>
         <ResetPasswordForm handleSubmit={handleResetPassword} />
         <Link to="/login">
           <span className="text-sky-450 ">Back to Log In</span>
