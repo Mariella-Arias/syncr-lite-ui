@@ -41,6 +41,11 @@ const authApi = {
     const response = await api.delete('auth/users/me/', data);
     return response;
   },
+
+  changePassword: async (data: Record<string, string>) => {
+    const response = await api.post('auth/users/set_password/', data);
+    return response;
+  },
 };
 
 export default authApi;

@@ -78,6 +78,17 @@ export const useAuthApi = () => {
   const deleteAccount = async (data: Record<string, string>) => {
     try {
       await authApi.deleteAccount(data);
+      await checkAuthStatus();
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
+  const changePassword = async (data: Record<string, string>) => {
+    try {
+      await authApi.changePassword(data);
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);
@@ -93,5 +104,6 @@ export const useAuthApi = () => {
     initiatePasswordReset,
     resetPassword,
     deleteAccount,
+    changePassword,
   };
 };

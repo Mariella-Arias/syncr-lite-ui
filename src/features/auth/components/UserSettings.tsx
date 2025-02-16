@@ -1,5 +1,7 @@
 import { useAuthApi } from '../hooks/useAuthApi';
 import { useModalContext } from '../../../context/ModalContext';
+import DeleteAccountModal from './DeleteAccountModal';
+import ChangePasswordModal from './ChangePasswordModal';
 
 const UserSettings = () => {
   const { logout } = useAuthApi();
@@ -15,12 +17,17 @@ const UserSettings = () => {
       >
         Log Out
       </div>
-      <div className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg">
+      <div
+        onClick={() => {
+          openModal('slide-in', <ChangePasswordModal />);
+        }}
+        className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
+      >
         Change Password
       </div>
       <div
         onClick={() => {
-          openModal();
+          openModal('default', <DeleteAccountModal />);
         }}
         className="text-red-550 hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
       >
