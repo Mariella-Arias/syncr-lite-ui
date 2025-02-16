@@ -42,7 +42,7 @@ const DeleteAccountForm = ({
               className="text-red-550 text-sm"
             />
           </div>
-          <Button type="submit" size="medium">
+          <Button type="submit" size="medium" disabled={isSubmitting}>
             <div className="flex items-center justify-center h-full w-full">
               {isSubmitting ? (
                 <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
