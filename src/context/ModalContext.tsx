@@ -1,9 +1,13 @@
-import { createContext, RefObject, useContext } from 'react';
+import { createContext, ReactNode, RefObject, useContext } from 'react';
 
-interface IModalContext {
-  openModal: () => void;
+export type ModalType = 'default' | 'slide-in' | null;
+
+export interface IModalContext {
+  openModal: (type: ModalType, modalContent: ReactNode) => void;
   closeModal: () => void;
+  modalType: ModalType;
   modalRef: RefObject<HTMLDialogElement>;
+  modalContent: ReactNode;
 }
 
 export const ModalContext = createContext<IModalContext | undefined>(undefined);
