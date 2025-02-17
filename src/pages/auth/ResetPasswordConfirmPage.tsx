@@ -5,18 +5,18 @@ import ResetPasswordForm from '../../features/auth/components/ResetPasswordForm'
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
 import { AxiosError } from 'axios';
 import { handleApiError } from '../../services/api';
+import { IResetPasswordFormData } from '../../features/auth/components/ResetPasswordForm';
 
 const ResetPasswordConfirmPage = () => {
   const { resetPassword } = useAuthApi();
   const { uid, token } = useParams();
   const navigate = useNavigate();
 
-  const handleResetPassword = async (values: Record<string, string>) => {
+  const handleResetPassword = async (values: IResetPasswordFormData) => {
     const body = {
       uid,
       token,
-      new_password: values.password,
-      re_new_password: values.rePassword,
+      ...values,
     };
     try {
       await resetPassword(body);

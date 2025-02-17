@@ -3,13 +3,18 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
+export interface IResetPasswordFormData {
+  new_password: string;
+  re_new_password: string;
+}
+
 const ResetPasswordForm = ({
   handleSubmit,
 }: {
-  handleSubmit: (values: Record<string, string>) => Promise<void>;
+  handleSubmit: (values: IResetPasswordFormData) => Promise<void>;
 }) => {
   const resetPasswordSchema = Yup.object().shape({
-    password: Yup.string()
+    new_password: Yup.string()
       .min(8, 'Password must be at least 8 characters long')
       .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
@@ -19,14 +24,14 @@ const ResetPasswordForm = ({
         'Password must contain at least one special character (@$!%*?&)'
       )
       .required('Password is required'),
-    rePassword: Yup.string().required('Password required'),
+    re_new_password: Yup.string().required('Password required'),
   });
 
   return (
     <Formik
       initialValues={{
-        password: '',
-        rePassword: '',
+        new_password: '',
+        re_new_password: '',
       }}
       validationSchema={resetPasswordSchema}
       validateOnChange={false}
@@ -44,26 +49,26 @@ const ResetPasswordForm = ({
         <Form className="flex flex-col w-full gap-3 mb-3">
           <div className="flex flex-col w-full">
             <Field
-              name="password"
+              name="new_password"
               type="password"
               placeholder="Create new password"
               className="border-input-border  border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
-              name="password"
+              name="new_password"
               component="div"
               className="text-red-550 text-sm"
             />
           </div>
           <div className="flex flex-col w-full">
             <Field
-              name="rePassword"
+              name="re_new_password"
               type="password"
               placeholder="Confirm new password"
               className="border-input-border  border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
-              name="rePassword"
+              name="re_new_password"
               component="div"
               className="text-red-550 text-sm"
             />
