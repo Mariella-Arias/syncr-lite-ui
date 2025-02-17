@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router';
 
 import logo from '../../assets/logo.png';
 import SignupForm, {
-  IUserProfile,
+  IUserCreate,
 } from '../../features/auth/components/SignupForm';
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
 
@@ -10,15 +10,9 @@ const SignupPage = () => {
   const { createAccount } = useAuthApi();
   const navigate = useNavigate();
 
-  const handleSignup = async (values: IUserProfile) => {
+  const handleSignup = async (values: IUserCreate) => {
     try {
-      await createAccount({
-        email: values.email,
-        first_name: values.firstName,
-        last_name: values.lastName,
-        password: values.password,
-        re_password: values.rePassword,
-      });
+      await createAccount(values);
       // TODO add success notification
     } catch (err: unknown) {
       // TODO add error notification

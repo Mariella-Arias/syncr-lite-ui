@@ -3,22 +3,22 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
-export interface IUserProfile {
-  firstName: string;
-  lastName: string;
+export interface IUserCreate {
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
-  rePassword: string;
+  re_password: string;
 }
 
 const SignupForm = ({
   handleSubmit,
 }: {
-  handleSubmit: (values: IUserProfile) => Promise<void>;
+  handleSubmit: (values: IUserCreate) => Promise<void>;
 }) => {
   const SignupSchema = Yup.object().shape({
-    firstName: Yup.string().required('Required'),
-    lastName: Yup.string().required('Required'),
+    first_name: Yup.string().required('Required'),
+    last_name: Yup.string().required('Required'),
     email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string()
       .min(8, 'Password must be at least 8 characters long')
@@ -30,15 +30,15 @@ const SignupForm = ({
         'Password must contain at least one special character (@$!%*?&)'
       )
       .required('Password is required'),
-    rePassword: Yup.string().required('Password required'),
+    re_password: Yup.string().required('Password required'),
   });
 
-  const userProfile: IUserProfile = {
-    firstName: '',
-    lastName: '',
+  const userProfile: IUserCreate = {
+    first_name: '',
+    last_name: '',
     email: '',
     password: '',
-    rePassword: '',
+    re_password: '',
   };
 
   return (
@@ -63,12 +63,12 @@ const SignupForm = ({
             <div className="flex flex-col w-full">
               <Field
                 type="text"
-                name="firstName"
+                name="first_name"
                 placeholder="First Name"
                 className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
               />
               <ErrorMessage
-                name="firstName"
+                name="first_name"
                 component="div"
                 className="text-red-550 text-sm"
               />
@@ -76,12 +76,12 @@ const SignupForm = ({
             <div className="flex flex-col w-full">
               <Field
                 type="text"
-                name="lastName"
+                name="last_name"
                 placeholder="Last Name"
                 className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
               />
               <ErrorMessage
-                name="lastName"
+                name="last_name"
                 component="div"
                 className="text-red-550 text-sm"
               />
@@ -115,12 +115,12 @@ const SignupForm = ({
             <div className="flex flex-col w-full">
               <Field
                 type="password"
-                name="rePassword"
+                name="re_password"
                 placeholder="Confirm Password"
                 className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
               />
               <ErrorMessage
-                name="rePassword"
+                name="re_password"
                 component="div"
                 className="text-red-550 text-sm"
               />

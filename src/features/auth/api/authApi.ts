@@ -1,4 +1,5 @@
 import api from '../../../services/api';
+import { IUserCreate } from '../components/SignupForm';
 
 const authApi = {
   login: async (data: Record<string, string>) => {
@@ -11,7 +12,7 @@ const authApi = {
     return response;
   },
 
-  createAccount: async (data: Record<string, string>) => {
+  createAccount: async (data: IUserCreate) => {
     const response = await api.post('auth/users/', data);
     return response;
   },

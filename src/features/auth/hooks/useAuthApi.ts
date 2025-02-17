@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 import authApi from '../api/authApi';
 import { handleApiError } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
+import { IUserCreate } from '../components/SignupForm';
 
 export const useAuthApi = () => {
   const { checkAuthStatus } = useAuth();
@@ -29,7 +30,7 @@ export const useAuthApi = () => {
     }
   };
 
-  const createAccount = async (data: Record<string, string>) => {
+  const createAccount = async (data: IUserCreate) => {
     try {
       await authApi.createAccount(data);
     } catch (err: unknown) {
