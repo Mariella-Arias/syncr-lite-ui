@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
-export interface IChangePassword {
+export interface IChangePasswordFormData {
   current_password: string;
   new_password: string;
   re_new_password: string;
@@ -12,7 +12,7 @@ export interface IChangePassword {
 const ChangePasswordForm = ({
   handleSubmit,
 }: {
-  handleSubmit: (values: IChangePassword) => Promise<void>;
+  handleSubmit: (values: IChangePasswordFormData) => Promise<void>;
 }) => {
   const validationSchema = Yup.object().shape({
     current_password: Yup.string().required('Password is required'),

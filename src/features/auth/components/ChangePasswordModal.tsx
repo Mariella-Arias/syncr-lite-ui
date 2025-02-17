@@ -1,10 +1,12 @@
 import { useAuthApi } from '../hooks/useAuthApi';
-import ChangePasswordForm, { IChangePassword } from './ChangePasswordForm';
+import ChangePasswordForm, {
+  IChangePasswordFormData,
+} from './ChangePasswordForm';
 
 const ChangePasswordModal = () => {
   const { changePassword, logout } = useAuthApi();
 
-  const handleSubmit = async (values: IChangePassword) => {
+  const handleSubmit = async (values: IChangePasswordFormData) => {
     try {
       await changePassword(values);
       await logout();

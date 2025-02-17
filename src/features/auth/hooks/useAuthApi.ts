@@ -5,7 +5,7 @@ import { handleApiError } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import { IUserCreate } from '../components/SignupForm';
 import { IUserLogin } from '../components/LoginForm';
-import { IChangePassword } from '../components/ChangePasswordForm';
+import { IChangePasswordFormData } from '../components/ChangePasswordForm';
 import { IDeleteAccountFormData } from '../components/DeleteAccountForm';
 
 export const useAuthApi = () => {
@@ -90,7 +90,7 @@ export const useAuthApi = () => {
     }
   };
 
-  const changePassword = async (data: IChangePassword) => {
+  const changePassword = async (data: IChangePasswordFormData) => {
     try {
       await authApi.changePassword(data);
     } catch (err: unknown) {
