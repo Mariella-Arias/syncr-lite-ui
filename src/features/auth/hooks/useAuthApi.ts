@@ -5,6 +5,7 @@ import { handleApiError } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import { IUserCreate } from '../components/SignupForm';
 import { IUserLogin } from '../components/LoginForm';
+import { IChangePassword } from '../components/ChangePasswordForm';
 
 export const useAuthApi = () => {
   const { checkAuthStatus } = useAuth();
@@ -88,7 +89,7 @@ export const useAuthApi = () => {
     }
   };
 
-  const changePassword = async (data: Record<string, string>) => {
+  const changePassword = async (data: IChangePassword) => {
     try {
       await authApi.changePassword(data);
     } catch (err: unknown) {

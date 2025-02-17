@@ -1,6 +1,7 @@
 import api from '../../../services/api';
 import { IUserCreate } from '../components/SignupForm';
 import { IUserLogin } from '../components/LoginForm';
+import { IChangePassword } from '../components/ChangePasswordForm';
 
 const authApi = {
   login: async (data: IUserLogin) => {
@@ -44,7 +45,7 @@ const authApi = {
     return response;
   },
 
-  changePassword: async (data: Record<string, string>) => {
+  changePassword: async (data: IChangePassword) => {
     const response = await api.post('auth/users/set_password/', data);
     return response;
   },

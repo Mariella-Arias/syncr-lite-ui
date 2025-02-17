@@ -1,16 +1,12 @@
 import { useAuthApi } from '../hooks/useAuthApi';
-import ChangePasswordForm from './ChangePasswordForm';
+import ChangePasswordForm, { IChangePassword } from './ChangePasswordForm';
 
 const ChangePasswordModal = () => {
   const { changePassword, logout } = useAuthApi();
 
-  const handleSubmit = async (values: Record<string, string>) => {
+  const handleSubmit = async (values: IChangePassword) => {
     try {
-      await changePassword({
-        current_password: values.password,
-        new_password: values.newPassword,
-        re_new_password: values.reNewPassword,
-      });
+      await changePassword(values);
       await logout();
     } catch (err: any) {
       console.log(err);

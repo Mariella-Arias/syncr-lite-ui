@@ -3,14 +3,20 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
+export interface IChangePassword {
+  current_password: string;
+  new_password: string;
+  re_new_password: string;
+}
+
 const ChangePasswordForm = ({
   handleSubmit,
 }: {
-  handleSubmit: (values: Record<string, string>) => Promise<void>;
+  handleSubmit: (values: IChangePassword) => Promise<void>;
 }) => {
   const validationSchema = Yup.object().shape({
-    password: Yup.string().required('Password is required'),
-    newPassword: Yup.string()
+    current_password: Yup.string().required('Password is required'),
+    new_password: Yup.string()
       .min(8, 'Password must be at least 8 characters long')
       .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
@@ -20,15 +26,15 @@ const ChangePasswordForm = ({
         'Password must contain at least one special character (@$!%*?&)'
       )
       .required('Password required'),
-    reNewPassword: Yup.string().required('Password required'),
+    re_new_password: Yup.string().required('Password required'),
   });
 
   return (
     <Formik
       initialValues={{
-        password: '',
-        newPassword: '',
-        reNewPassword: '',
+        current_password: '',
+        new_password: '',
+        re_new_password: '',
       }}
       validationSchema={validationSchema}
       validateOnChange={false}
@@ -50,12 +56,12 @@ const ChangePasswordForm = ({
               Current Password
             </label>
             <Field
-              name="password"
+              name="current_password"
               type="password"
               className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
-              name="password"
+              name="current_password"
               component="div"
               className="text-red-550 text-sm"
             />
@@ -65,12 +71,12 @@ const ChangePasswordForm = ({
               New Password
             </label>
             <Field
-              name="newPassword"
+              name="new_password"
               type="password"
               className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
-              name="newPassword"
+              name="new_password"
               component="div"
               className="text-red-550 text-sm"
             />
@@ -80,12 +86,12 @@ const ChangePasswordForm = ({
               Confirm Password
             </label>
             <Field
-              name="reNewPassword"
+              name="re_new_password"
               type="password"
               className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
-              name="reNewPassword"
+              name="re_new_password"
               component="div"
               className="text-red-550 text-sm"
             />
