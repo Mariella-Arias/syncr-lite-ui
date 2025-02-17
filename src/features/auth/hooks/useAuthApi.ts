@@ -4,14 +4,14 @@ import authApi from '../api/authApi';
 import { handleApiError } from '../../../services/api';
 import { useAuth } from '../../../context/AuthContext';
 import { IUserCreate } from '../components/SignupForm';
-import { IUserLogin } from '../components/LoginForm';
+import { ILoginCredentials } from '../components/LoginForm';
 import { IChangePasswordFormData } from '../components/ChangePasswordForm';
 import { IDeleteAccountFormData } from '../components/DeleteAccountForm';
 
 export const useAuthApi = () => {
   const { checkAuthStatus } = useAuth();
 
-  const login = async (credentials: IUserLogin) => {
+  const login = async (credentials: ILoginCredentials) => {
     try {
       await authApi.login(credentials);
       await checkAuthStatus();

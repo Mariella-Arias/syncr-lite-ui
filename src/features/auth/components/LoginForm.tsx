@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
-export interface IUserLogin {
+export interface ILoginCredentials {
   email: string;
   password: string;
 }
@@ -11,9 +11,9 @@ export interface IUserLogin {
 const LoginForm = ({
   handleLogin,
 }: {
-  handleLogin: (credentials: IUserLogin) => Promise<void>;
+  handleLogin: (credentials: ILoginCredentials) => Promise<void>;
 }) => {
-  const initialValues: IUserLogin = {
+  const initialValues: ILoginCredentials = {
     email: '',
     password: '',
   };

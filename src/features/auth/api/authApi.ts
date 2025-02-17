@@ -1,11 +1,11 @@
 import api from '../../../services/api';
 import { IUserCreate } from '../components/SignupForm';
-import { IUserLogin } from '../components/LoginForm';
+import { ILoginCredentials } from '../components/LoginForm';
 import { IChangePasswordFormData } from '../components/ChangePasswordForm';
 import { IDeleteAccountFormData } from '../components/DeleteAccountForm';
 
 const authApi = {
-  login: async (data: IUserLogin) => {
+  login: async (data: ILoginCredentials) => {
     const response = await api.post('token/', data);
     return response;
   },

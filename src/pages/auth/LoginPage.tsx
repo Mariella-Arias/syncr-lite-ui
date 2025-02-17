@@ -3,7 +3,7 @@ import { Link, Navigate } from 'react-router';
 
 import logo from '../../assets/logo.png';
 import LoginForm, {
-  IUserLogin,
+  ILoginCredentials,
 } from '../../features/auth/components/LoginForm';
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
 import { useAuth } from '../../context/AuthContext';
@@ -43,7 +43,7 @@ const LoginPage = () => {
         <img src={logo} className="mb-7 p-3" />
         <p className="font-nunito text-3xl font-bold">Welcome back</p>
         <LoginForm
-          handleLogin={async (credentials: IUserLogin) => {
+          handleLogin={async (credentials: ILoginCredentials) => {
             try {
               await login(credentials);
             } catch (err: unknown) {
