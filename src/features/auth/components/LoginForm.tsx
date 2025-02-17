@@ -3,12 +3,17 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
+export interface IUserLogin {
+  email: string;
+  password: string;
+}
+
 const LoginForm = ({
   handleLogin,
 }: {
-  handleLogin: (credentials: Record<string, string>) => Promise<void>;
+  handleLogin: (credentials: IUserLogin) => Promise<void>;
 }) => {
-  const initialValues = {
+  const initialValues: IUserLogin = {
     email: '',
     password: '',
   };

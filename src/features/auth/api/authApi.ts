@@ -1,8 +1,9 @@
 import api from '../../../services/api';
 import { IUserCreate } from '../components/SignupForm';
+import { IUserLogin } from '../components/LoginForm';
 
 const authApi = {
-  login: async (data: Record<string, string>) => {
+  login: async (data: IUserLogin) => {
     const response = await api.post('token/', data);
     return response;
   },

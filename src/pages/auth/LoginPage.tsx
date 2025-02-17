@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router';
-import { AxiosError } from 'axios';
 
 import logo from '../../assets/logo.png';
-import LoginForm from '../../features/auth/components/LoginForm';
+import LoginForm, {
+  IUserLogin,
+} from '../../features/auth/components/LoginForm';
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
-import { ILoginCredentials } from '../../features/auth/types/auth.types';
-import { handleApiError } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
 const Loader = () => {
@@ -44,13 +43,12 @@ const LoginPage = () => {
         <img src={logo} className="mb-7 p-3" />
         <p className="font-nunito text-3xl font-bold">Welcome back</p>
         <LoginForm
-          handleLogin={async (credentials: Record<string, string>) => {
+          handleLogin={async (credentials: IUserLogin) => {
             try {
               await login(credentials);
             } catch (err: unknown) {
-              if (err instanceof AxiosError) {
-                throw handleApiError(err);
-              }
+              console.log(err);
+              // TODO add error notification
             }
           }}
         />
