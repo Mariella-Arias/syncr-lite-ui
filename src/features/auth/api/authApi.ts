@@ -2,6 +2,7 @@ import api from '../../../services/api';
 import { IUserCreate } from '../components/SignupForm';
 import { IUserLogin } from '../components/LoginForm';
 import { IChangePassword } from '../components/ChangePasswordForm';
+import { IDeleteAccountFormData } from '../components/DeleteAccountForm';
 
 const authApi = {
   login: async (data: IUserLogin) => {
@@ -40,7 +41,7 @@ const authApi = {
     return response;
   },
 
-  deleteAccount: async (data: Record<string, string>) => {
+  deleteAccount: async (data: IDeleteAccountFormData) => {
     const response = await api.delete('auth/users/me/', data);
     return response;
   },

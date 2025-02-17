@@ -6,6 +6,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { IUserCreate } from '../components/SignupForm';
 import { IUserLogin } from '../components/LoginForm';
 import { IChangePassword } from '../components/ChangePasswordForm';
+import { IDeleteAccountFormData } from '../components/DeleteAccountForm';
 
 export const useAuthApi = () => {
   const { checkAuthStatus } = useAuth();
@@ -78,7 +79,7 @@ export const useAuthApi = () => {
     }
   };
 
-  const deleteAccount = async (data: Record<string, string>) => {
+  const deleteAccount = async (data: IDeleteAccountFormData) => {
     try {
       await authApi.deleteAccount(data);
       await checkAuthStatus();

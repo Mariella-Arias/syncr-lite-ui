@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 
 import { handleApiError } from '../../../services/api';
-import DeleteAccountForm from './DeleteAccountForm';
+import DeleteAccountForm, { IDeleteAccountFormData } from './DeleteAccountForm';
 import { useAuthApi } from '../hooks/useAuthApi';
 
 const DeleteAccountModal = () => {
@@ -15,9 +15,9 @@ const DeleteAccountModal = () => {
       <p>Are you sure you want to delete your account?</p>
       <p>Enter password to confirm:</p>
       <DeleteAccountForm
-        handleSubmit={async (data: Record<string, string>) => {
+        handleSubmit={async (data: IDeleteAccountFormData) => {
           try {
-            await deleteAccount({ current_password: data.password });
+            await deleteAccount(data);
           } catch (err: unknown) {
             if (err instanceof AxiosError) {
               throw handleApiError(err);
@@ -30,3 +30,4 @@ const DeleteAccountModal = () => {
 };
 
 export default DeleteAccountModal;
+

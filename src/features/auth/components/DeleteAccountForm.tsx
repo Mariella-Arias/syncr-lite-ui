@@ -3,18 +3,22 @@ import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
 
+export interface IDeleteAccountFormData {
+  current_password: string;
+}
+
 const DeleteAccountForm = ({
   handleSubmit,
 }: {
-  handleSubmit: (data: Record<string, string>) => Promise<void>;
+  handleSubmit: (data: IDeleteAccountFormData) => Promise<void>;
 }) => {
   const validationSchema = Yup.object().shape({
-    password: Yup.string().required('Required'),
+    current_password: Yup.string().required('Required'),
   });
 
   return (
     <Formik
-      initialValues={{ password: '' }}
+      initialValues={{ current_password: '' }}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnBlur={false}
@@ -31,13 +35,13 @@ const DeleteAccountForm = ({
         <Form className="flex flex-col gap-2">
           <div className="flex flex-col w-full">
             <Field
-              name="password"
+              name="current_password"
               type="password"
               placeholder="Current password"
               className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
             />
             <ErrorMessage
-              name="password"
+              name="current_password"
               component="div"
               className="text-red-550 text-sm"
             />
