@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
+import PasswordInputField from './PasswordInputField';
 
 export interface IUserCreate {
   first_name: string;
@@ -16,6 +18,8 @@ const SignupForm = ({
 }: {
   handleSubmit: (values: IUserCreate) => Promise<void>;
 }) => {
+  const [passwordFieldType, setPasswordFieldType] = useState('password');
+  const [rePasswordFieldType, setRePasswordFieldType] = useState('password');
   const SignupSchema = Yup.object().shape({
     first_name: Yup.string().required('Required'),
     last_name: Yup.string().required('Required'),
@@ -101,10 +105,12 @@ const SignupForm = ({
             </div>
             <div className="flex flex-col w-full">
               <Field
-                type="password"
                 name="password"
+                type={passwordFieldType}
+                setType={setPasswordFieldType}
+                component={PasswordInputField}
                 placeholder="Create Password"
-                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
+                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg relative w-full"
               />
               <ErrorMessage
                 name="password"
@@ -114,10 +120,12 @@ const SignupForm = ({
             </div>
             <div className="flex flex-col w-full">
               <Field
-                type="password"
                 name="re_password"
+                type={rePasswordFieldType}
+                setType={setRePasswordFieldType}
+                component={PasswordInputField}
                 placeholder="Confirm Password"
-                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
+                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
               />
               <ErrorMessage
                 name="re_password"
