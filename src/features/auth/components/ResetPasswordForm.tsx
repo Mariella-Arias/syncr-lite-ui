@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
+import PasswordInputField from './PasswordInputField';
 
 export interface IResetPasswordFormData {
   new_password: string;
@@ -13,6 +15,9 @@ const ResetPasswordForm = ({
 }: {
   handleSubmit: (values: IResetPasswordFormData) => Promise<void>;
 }) => {
+  const [passwordFieldType, setPasswordFieldType] = useState('password');
+  const [rePasswordFieldType, setRePasswordFieldType] = useState('password');
+
   const resetPasswordSchema = Yup.object().shape({
     new_password: Yup.string()
       .min(8, 'Password must be at least 8 characters long')
@@ -50,9 +55,11 @@ const ResetPasswordForm = ({
           <div className="flex flex-col w-full">
             <Field
               name="new_password"
-              type="password"
+              type={passwordFieldType}
+              setType={setPasswordFieldType}
+              component={PasswordInputField}
               placeholder="Create new password"
-              className="border-input-border  border-1 rounded-[10px] py-2 px-3 text-lg"
+              className="border-input-border  border-1 rounded-[10px] py-2 px-3 text-lg w-full"
             />
             <ErrorMessage
               name="new_password"
@@ -63,9 +70,11 @@ const ResetPasswordForm = ({
           <div className="flex flex-col w-full">
             <Field
               name="re_new_password"
-              type="password"
+              type={rePasswordFieldType}
+              setType={setRePasswordFieldType}
+              component={PasswordInputField}
               placeholder="Confirm new password"
-              className="border-input-border  border-1 rounded-[10px] py-2 px-3 text-lg"
+              className="border-input-border  border-1 rounded-[10px] py-2 px-3 text-lg w-full"
             />
             <ErrorMessage
               name="re_new_password"

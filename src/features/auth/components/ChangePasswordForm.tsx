@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
+import PasswordInputField from './PasswordInputField';
 
 export interface IChangePasswordFormData {
   current_password: string;
@@ -14,6 +16,11 @@ const ChangePasswordForm = ({
 }: {
   handleSubmit: (values: IChangePasswordFormData) => Promise<void>;
 }) => {
+  const [passwordFieldTyoe, setPasswordFieldType] = useState('password');
+  const [newPasswordFieldType, setNewPasswordFieldType] = useState('password');
+  const [reNewPasswordFieldType, setReNewPasswordFieldType] =
+    useState('password');
+
   const validationSchema = Yup.object().shape({
     current_password: Yup.string().required('Password is required'),
     new_password: Yup.string()
@@ -57,8 +64,10 @@ const ChangePasswordForm = ({
             </label>
             <Field
               name="current_password"
-              type="password"
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
+              type={passwordFieldTyoe}
+              setType={setPasswordFieldType}
+              component={PasswordInputField}
+              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
             />
             <ErrorMessage
               name="current_password"
@@ -72,8 +81,10 @@ const ChangePasswordForm = ({
             </label>
             <Field
               name="new_password"
-              type="password"
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
+              type={newPasswordFieldType}
+              setType={setNewPasswordFieldType}
+              component={PasswordInputField}
+              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
             />
             <ErrorMessage
               name="new_password"
@@ -87,8 +98,10 @@ const ChangePasswordForm = ({
             </label>
             <Field
               name="re_new_password"
-              type="password"
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
+              type={reNewPasswordFieldType}
+              setType={setReNewPasswordFieldType}
+              component={PasswordInputField}
+              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
             />
             <ErrorMessage
               name="re_new_password"

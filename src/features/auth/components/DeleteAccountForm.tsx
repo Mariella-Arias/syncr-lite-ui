@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
+import PasswordInputField from './PasswordInputField';
 
 export interface IDeleteAccountFormData {
   current_password: string;
@@ -12,6 +14,7 @@ const DeleteAccountForm = ({
 }: {
   handleSubmit: (data: IDeleteAccountFormData) => Promise<void>;
 }) => {
+  const [passwordFieldType, setPasswordFieldType] = useState('password');
   const validationSchema = Yup.object().shape({
     current_password: Yup.string().required('Required'),
   });
@@ -36,9 +39,11 @@ const DeleteAccountForm = ({
           <div className="flex flex-col w-full">
             <Field
               name="current_password"
-              type="password"
+              type={passwordFieldType}
+              setType={setPasswordFieldType}
+              component={PasswordInputField}
               placeholder="Current password"
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg"
+              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
             />
             <ErrorMessage
               name="current_password"
