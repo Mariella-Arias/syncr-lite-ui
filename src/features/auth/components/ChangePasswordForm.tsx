@@ -57,59 +57,76 @@ const ChangePasswordForm = ({
       }}
     >
       {({ isSubmitting }) => (
-        <Form className="flex flex-col gap-2">
-          <div className="flex flex-col w-full">
-            <label className="text-lg text-body-text font-semibold">
-              Current Password
-            </label>
-            <Field
-              name="current_password"
-              type={passwordFieldTyoe}
-              setType={setPasswordFieldType}
-              component={PasswordInputField}
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
-            />
-            <ErrorMessage
-              name="current_password"
-              component="div"
-              className="text-red-550 text-sm"
-            />
+        <Form className="flex flex-col h-full">
+          <div className="flex flex-1 flex-col gap-4">
+            <div className="flex flex-col">
+              <label className="text-lg text-body-text font-semibold">
+                Current Password
+              </label>
+              <Field
+                name="current_password"
+                type={passwordFieldTyoe}
+                setType={setPasswordFieldType}
+                component={PasswordInputField}
+                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
+              />
+              <ErrorMessage
+                name="current_password"
+                component="div"
+                className="text-red-550 text-sm"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-lg text-body-text font-semibold">
+                New Password
+              </label>
+              <Field
+                name="new_password"
+                type={newPasswordFieldType}
+                setType={setNewPasswordFieldType}
+                component={PasswordInputField}
+                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
+              />
+              <ErrorMessage
+                name="new_password"
+                component="div"
+                className="text-red-550 text-sm"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="text-lg text-body-text font-semibold">
+                Confirm Password
+              </label>
+              <Field
+                name="re_new_password"
+                type={reNewPasswordFieldType}
+                setType={setReNewPasswordFieldType}
+                component={PasswordInputField}
+                className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
+              />
+              <ErrorMessage
+                name="re_new_password"
+                component="div"
+                className="text-red-550 text-sm"
+              />
+            </div>
+
+            <div className="text-base text-body-text bg-[#F8F8F8] px-5 py-4 rounded-[10px] font-semibold flex flex-col gap-1">
+              <p className="mb-1">Password Requirements:</p>
+              <p>&nbsp;•&nbsp; Minimum 8 characters</p>
+              <p>&nbsp;•&nbsp; At least one uppercase letter</p>
+              <p>&nbsp;•&nbsp; At least one number or special character</p>
+            </div>
           </div>
-          <div className="flex flex-col w-full">
-            <label className="text-lg text-body-text font-semibold">
-              New Password
-            </label>
-            <Field
-              name="new_password"
-              type={newPasswordFieldType}
-              setType={setNewPasswordFieldType}
-              component={PasswordInputField}
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
-            />
-            <ErrorMessage
-              name="new_password"
-              component="div"
-              className="text-red-550 text-sm"
-            />
-          </div>
-          <div className="flex flex-col w-full">
-            <label className="text-lg text-body-text font-semibold">
-              Confirm Password
-            </label>
-            <Field
-              name="re_new_password"
-              type={reNewPasswordFieldType}
-              setType={setReNewPasswordFieldType}
-              component={PasswordInputField}
-              className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
-            />
-            <ErrorMessage
-              name="re_new_password"
-              component="div"
-              className="text-red-550 text-sm"
-            />
-          </div>
-          <Button size="medium" type="submit" disabled={isSubmitting}>
+
+          <Button
+            size="medium"
+            type="submit"
+            disabled={isSubmitting}
+            className="mt-4"
+          >
             <div className="flex items-center justify-center h-full w-full">
               {isSubmitting ? (
                 <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>

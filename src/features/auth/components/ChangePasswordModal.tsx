@@ -17,9 +17,13 @@ const ChangePasswordModal = () => {
   };
 
   return (
-    <div className="h-full p-4">
-      <p className="font-nunito text-2xl font-bold my-3">Change Password</p>
-      <ChangePasswordForm handleSubmit={handleSubmit} />
+    <div className="flex flex-col h-full px-12 py-8 gap-4">
+      {/* Header */}
+      <p className="font-nunito text-2xl font-bold my-2">Change Password</p>
+      {/* Scrollable Content Area */}
+      <div className="flex-1 overflow-y-auto">
+        <ChangePasswordForm handleSubmit={handleSubmit} />
+      </div>
     </div>
   );
 };
