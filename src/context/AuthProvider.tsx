@@ -1,54 +1,32 @@
 import { ReactNode, useState } from 'react';
 import { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
 
-import api, { handleApiError } from '../services/api';
+import api from '../services/api';
 import { AuthContext } from './AuthContext';
-import { ILoginCredentials } from '../features/auth/types/auth.types';
+import { AppDispatch } from '../app/store';
+import { setUser } from '../features/auth/authSlice';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
 
   const checkAuthStatus = async () => {
     try {
       const response = await api.get('auth/users/me/');
-      console.log('Auth check successful:', response);
-
+      dispatch(setUser(response));
       setIsAuthenticated(true);
     } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        // TODO handle refresh token
+        // console.log(handleApiError(err));
+      }
       setIsAuthenticated(false);
-      if (err instanceof AxiosError) {
-        throw handleApiError(err);
-      }
-    }
-  };
-
-  const login = async (credentials: ILoginCredentials) => {
-    try {
-      await api.post('token/', credentials);
-      await checkAuthStatus();
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        throw handleApiError(err);
-      }
-    }
-  };
-
-  const logout = async () => {
-    try {
-      const response = await api.post('api/token/blacklist/');
-      setIsAuthenticated(false);
-      console.log('Log out successful', response);
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        throw handleApiError(err);
-      }
     }
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, checkAuthStatus, login, logout }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, checkAuthStatus }}>
       {children}
     </AuthContext.Provider>
   );
