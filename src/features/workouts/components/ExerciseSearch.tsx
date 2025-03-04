@@ -1,4 +1,10 @@
-import { useState, useRef, useEffect, ChangeEvent } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  ChangeEvent,
+  MouseEvent as ReactMouseEvent,
+} from 'react';
 import { FieldInputProps } from 'formik';
 
 import { IExercise } from './CreateWorkoutModal';
@@ -7,6 +13,7 @@ import Button from '../../../components/common/Button';
 interface ExerciseAutocompleteProps {
   field: FieldInputProps<string>;
   options: IExercise[];
+  onDeleteExercise: (exercise: IExercise) => Promise<void>;
   form: {
     setFieldValue: (
       field: string,
@@ -43,13 +50,14 @@ const SearchIcon = () => {
 const ExerciseSearch = ({
   field,
   options,
+  onDeleteExercise,
   form: { setFieldValue, setFieldTouched },
   ...props
 }: ExerciseAutocompleteProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearchIcon, setIsSearchIcon] = useState(true);
-  const fieldRef = useRef<HTMLDivElement>(null);
   const { name, value, onChange } = field;
+  const fieldRef = useRef<HTMLDivElement>(null);
 
   const filteredExercises = options.filter((option) =>
     option.value.includes(value.toLowerCase())
@@ -90,6 +98,7 @@ const ExerciseSearch = ({
         <input
           {...field}
           {...props}
+          autoComplete="off"
           value={value}
           onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
           onFocus={() => {
@@ -114,16 +123,40 @@ const ExerciseSearch = ({
         </Button>
       </div>
       {isDropdownOpen && (
-        <div className="absolute transition-transform duration-200 ease-in-out bg-white rounded-[10px] shadow-md top-0 pt-17 left-0 right-0 -mx-3 -translate-y-3 z-30 border-1 border-input-border p-3 flex flex-col cursor-pointer max-h-74">
+        <div className="absolute transition-transform duration-200 ease-in-out bg-white rounded-[10px] shadow-md top-0 pt-17 left-0 right-0 -mx-3 -translate-y-3 z-30 border-1 border-input-border p-3 flex flex-col cursor-pointer max-h-63">
           <div className="flex-1 overflow-y-auto no-scrollbar">
-            {filteredExercises.map((option, optionIdx) => (
+            {filteredExercises.map((option) => (
               <div
                 key={option.value}
                 onClick={() => {
+                  // Set exercise value and trigger validation on its field
                   setFieldValue(name, option.label);
                   setFieldTouched(name, true, true);
+
                   setIsSearchIcon(false);
                   setIsDropdownOpen(false);
+
+                  // Update Fields-array to include the newly selected exercise's tracking parameter
+                  const pathPieces = name.split('.');
+
+                  const blockIdx = parseInt(pathPieces[1]);
+                  const exerciseIdx = parseInt(pathPieces[3]);
+
+                  // Update Fields[]
+                  const fieldsPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.fields`;
+                  const newFields = ['sets', option.tracking_param];
+                  setFieldValue(fieldsPath, newFields);
+
+                  // Update Data{}
+                  const dataPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.data`;
+                  setFieldValue(`${dataPath}.${option.tracking_param}`, '');
+
+                  setFieldTouched(fieldsPath, true, true);
+                  setFieldTouched(
+                    `${dataPath}.${option.tracking_param}`,
+                    true,
+                    true
+                  );
                 }}
                 className="flex justify-between items-center font-nunito text-base font-semibold text-body-text p-2 hover:font-extrabold odd:bg-[#F3F2F2] even:bg-white relative"
               >
@@ -132,9 +165,9 @@ const ExerciseSearch = ({
                 {option.is_editable && (
                   <button
                     type="button"
-                    onClick={(e: any) => {
+                    onClick={(e: ReactMouseEvent<HTMLButtonElement>) => {
                       e.stopPropagation();
-                      console.log('"x" button clicked');
+                      onDeleteExercise(option);
                     }}
                     className="hover:bg-neutral-200 absolute right-0 top-0 bottom-0 px-3 rounded-[10px]"
                   >
