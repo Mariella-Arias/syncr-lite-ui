@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import Button from '../../../components/common/Button';
 import { IExercise } from './CreateWorkoutModal';
 import ExerciseSearch from './ExerciseSearch';
+import { INewExerciseData } from './CreateExerciseForm';
 
 export interface IExerciseData {
   exercise: number | string;
@@ -27,9 +28,13 @@ export interface IWorkoutData {
 const CreateWorkoutForm = ({
   options,
   handleSubmit,
+  deleteExercise,
+  createExercise,
 }: {
   options: IExercise[];
   handleSubmit: (values: IWorkoutData) => Promise<void>;
+  deleteExercise: (exercise: IExercise) => Promise<void>;
+  createExercise: (data: INewExerciseData) => Promise<void>;
 }) => {
   const initialValues: IWorkoutData = {
     name: '',
@@ -197,6 +202,12 @@ const CreateWorkoutForm = ({
                                                     component={ExerciseSearch}
                                                     options={options}
                                                     placeholder="Add Exercise"
+                                                    onDeleteExercise={
+                                                      deleteExercise
+                                                    }
+                                                    createExercise={
+                                                      createExercise
+                                                    }
                                                   />
                                                   <ErrorMessage
                                                     name={`blocks.${blockIdx}.exercises.${exerciseIdx}.exercise`}

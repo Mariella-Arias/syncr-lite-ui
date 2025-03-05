@@ -3,7 +3,12 @@ import { useEffect, useState, useRef } from 'react';
 import CreateWorkoutForm from './CreateWorkoutForm';
 import { useWorkoutsApi } from '../hooks/useWorkoutsApi';
 import { IWorkoutData } from './CreateWorkoutForm';
-import { useModalContext } from '../../../context/ModalContext';
+import {
+  useSlideInModalContext,
+  useCenteredModalContext,
+} from '../../../context/ModalsContext';
+import DeleteExerciseModal from './DeleteExerciseModal';
+import { INewExerciseData } from './CreateExerciseForm';
 
 export interface IExercise {
   id: number;
@@ -23,38 +28,69 @@ const Loader = () => {
 };
 
 const CreateWorkoutModal = () => {
-  const { getExercises, createWorkout } = useWorkoutsApi();
+  const { createExercise, getExercises, createWorkout, deleteExercise } =
+    useWorkoutsApi();
   const [isLoading, setIsLoading] = useState(false);
   const [exercises, setExercises] = useState<IExercise[]>([]);
   const hasFetched = useRef(false);
-  const { closeModal } = useModalContext();
+  const { close: closeSlideInModal } = useSlideInModalContext();
+  const { open: openCenteredModal, close: closeCenteredModal } =
+    useCenteredModalContext();
 
-  const handleSubmit = async (values: IWorkoutData) => {
-    console.log('Submitting', values);
-
+  const handleCreateWorkout = async (values: IWorkoutData) => {
     try {
       await createWorkout(values);
+      // TODO: add success notification
     } catch (err) {
       // TODO: add error notification
       console.log(err);
     } finally {
-      closeModal();
+      closeSlideInModal();
+    }
+  };
+
+  const handleDeleteExercise = async (exercise: IExercise) => {
+    openCenteredModal(
+      <DeleteExerciseModal
+        exerciseName={exercise.label}
+        onCancel={() => closeCenteredModal()}
+        onDelete={async () => {
+          try {
+            await deleteExercise({ id: exercise.id });
+            await fetchExercises();
+          } catch (err) {
+            console.log(err);
+            // TODO: handle error
+          } finally {
+            closeCenteredModal();
+          }
+        }}
+      />
+    );
+  };
+
+  const handleCreateExercise = async (data: INewExerciseData) => {
+    try {
+      await createExercise(data);
+      await fetchExercises();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchExercises = async () => {
+    try {
+      const response = await getExercises();
+      setExercises(response);
+    } catch (error) {
+      console.log('Error fetching exercises', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     if (hasFetched.current) return;
-
-    const fetchExercises = async () => {
-      try {
-        const response = await getExercises();
-        setExercises(response);
-      } catch (error) {
-        console.log('Error fetching exercises', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
     fetchExercises();
     hasFetched.current = true;
@@ -69,7 +105,12 @@ const CreateWorkoutModal = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <CreateWorkoutForm handleSubmit={handleSubmit} options={exercises} />
+          <CreateWorkoutForm
+            handleSubmit={handleCreateWorkout}
+            deleteExercise={handleDeleteExercise}
+            createExercise={handleCreateExercise}
+            options={exercises}
+          />
         )}
       </div>
     </div>
