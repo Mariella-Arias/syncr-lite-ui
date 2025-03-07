@@ -2,28 +2,12 @@ import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
-import { IExercise } from './CreateWorkoutModal';
 import ExerciseSearch from './ExerciseSearch';
-import { INewExerciseData } from './CreateExerciseForm';
-
-export interface IExerciseData {
-  exercise: number | string;
-  fields: string[];
-  data: {
-    sets: number;
-    reps?: number;
-    duration?: number;
-  };
-}
-
-export interface IBlockData {
-  exercises: IExerciseData[];
-}
-
-export interface IWorkoutData {
-  name: string;
-  blocks: IBlockData[];
-}
+import {
+  INewExerciseData,
+  IWorkoutData,
+  IExercise,
+} from '../types/workouts.types';
 
 const CreateWorkoutForm = ({
   options,
@@ -283,8 +267,10 @@ const CreateWorkoutForm = ({
                                           fields: ['sets'],
                                           data: {
                                             sets: 1,
-                                            reps: null,
-                                            duration: null,
+                                            // reps: null,
+                                            // duration: null,
+                                            reps: '',
+                                            duration: '',
                                           },
                                         })
                                       }
@@ -309,7 +295,8 @@ const CreateWorkoutForm = ({
                               {
                                 exercise: '',
                                 fields: ['sets'],
-                                data: { sets: 1, reps: null, duration: null },
+                                // data: { sets: 1, reps: null, duration: null },
+                                data: { sets: 1, reps: '', duration: '' },
                               },
                             ],
                           })

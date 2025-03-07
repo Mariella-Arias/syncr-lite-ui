@@ -9,15 +9,16 @@ import {
 import { FieldInputProps } from 'formik';
 import { useSelector } from 'react-redux';
 
-import { IExercise } from './CreateWorkoutModal';
 import Button from '../../../components/common/Button';
-import CreateExerciseForm, {
+import CreateExerciseForm from './CreateExerciseForm';
+import { auth } from '../../auth/authSlice';
+import {
   INewExerciseData,
   INewExercise,
-} from './CreateExerciseForm';
-import { auth } from '../../auth/authSlice';
+  IExercise,
+} from '../types/workouts.types';
 
-interface ExerciseAutocompleteProps {
+interface ExerciseSearchProps {
   field: FieldInputProps<string>;
   options: IExercise[];
   onDeleteExercise: (exercise: IExercise) => Promise<void>;
@@ -62,7 +63,7 @@ const ExerciseSearch = ({
   form: { setFieldValue, setFieldTouched },
   createExercise,
   ...props
-}: ExerciseAutocompleteProps) => {
+}: ExerciseSearchProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearchIcon, setIsSearchIcon] = useState(true);
   const [exerciseForm, setExerciseForm] = useState<ReactNode>(null);
@@ -125,7 +126,7 @@ const ExerciseSearch = ({
           {...field}
           {...props}
           autoComplete="off"
-          value={value}
+          value={value || ''}
           onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
           onFocus={() => {
             setIsDropdownOpen(true);
@@ -167,35 +168,68 @@ const ExerciseSearch = ({
               filteredExercises.map((option) => (
                 <div
                   key={option.value}
+                  // onClick={() => {
+                  //   // Set exercise value and trigger validation on its field
+                  //   setFieldValue(name, option.label);
+                  //   setFieldTouched(name, true, true);
+
+                  //   setIsSearchIcon(false);
+                  //   setIsDropdownOpen(false);
+
+                  //   // Update Fields-array to include the newly selected exercise's tracking parameter
+                  //   const pathPieces = name.split('.');
+
+                  //   const blockIdx = parseInt(pathPieces[1]);
+                  //   const exerciseIdx = parseInt(pathPieces[3]);
+
+                  //   // Update Fields[]
+                  //   const fieldsPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.fields`;
+                  //   const newFields = ['sets', option.tracking_param];
+                  //   setFieldValue(fieldsPath, newFields);
+
+                  //   // Update Data{}
+                  //   const dataPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.data`;
+                  //   setFieldValue(`${dataPath}.${option.tracking_param}`, '');
+
+                  //   setFieldTouched(fieldsPath, true, true);
+                  //   setFieldTouched(
+                  //     `${dataPath}.${option.tracking_param}`,
+                  //     true,
+                  //     true
+                  //   );
+                  // }}
                   onClick={() => {
-                    // Set exercise value and trigger validation on its field
-                    setFieldValue(name, option.label);
-                    setFieldTouched(name, true, true);
-
                     setIsSearchIcon(false);
-                    setIsDropdownOpen(false);
 
-                    // Update Fields-array to include the newly selected exercise's tracking parameter
+                    // Set exercise value and trigger validation on its field
                     const pathPieces = name.split('.');
-
                     const blockIdx = parseInt(pathPieces[1]);
                     const exerciseIdx = parseInt(pathPieces[3]);
-
-                    // Update Fields[]
                     const fieldsPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.fields`;
-                    const newFields = ['sets', option.tracking_param];
-                    setFieldValue(fieldsPath, newFields);
-
-                    // Update Data{}
                     const dataPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.data`;
-                    setFieldValue(`${dataPath}.${option.tracking_param}`, '');
+                    const newFields = ['sets', option.tracking_param];
 
-                    setFieldTouched(fieldsPath, true, true);
-                    setFieldTouched(
-                      `${dataPath}.${option.tracking_param}`,
-                      true,
-                      true
-                    );
+                    setFieldValue(name, option.label, true)
+                      .then(() => setFieldTouched(name, true, true))
+                      .then(() => setFieldValue(fieldsPath, newFields, true))
+                      .then(() =>
+                        setFieldValue(
+                          `${dataPath}.${option.tracking_param}`,
+                          '',
+                          true
+                        )
+                      )
+                      .then(() => setFieldTouched(fieldsPath, true, true))
+                      .then(() =>
+                        setFieldTouched(
+                          `${dataPath}.${option.tracking_param}`,
+                          true,
+                          true
+                        )
+                      )
+                      .then(() => {
+                        setIsDropdownOpen(false);
+                      });
                   }}
                   className="flex justify-between items-center font-nunito text-base font-semibold text-body-text p-2 hover:font-extrabold odd:bg-[#F3F2F2] even:bg-white relative"
                 >

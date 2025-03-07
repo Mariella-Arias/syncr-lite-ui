@@ -2,22 +2,16 @@ import { useEffect, useState, useRef } from 'react';
 
 import CreateWorkoutForm from './CreateWorkoutForm';
 import { useWorkoutsApi } from '../hooks/useWorkoutsApi';
-import { IWorkoutData } from './CreateWorkoutForm';
 import {
   useSlideInModalContext,
   useCenteredModalContext,
 } from '../../../context/ModalsContext';
 import DeleteExerciseModal from './DeleteExerciseModal';
-import { INewExerciseData } from './CreateExerciseForm';
-
-export interface IExercise {
-  id: number;
-  is_editable: boolean;
-  label: string;
-  tracking_param: string;
-  user: number;
-  value: string;
-}
+import {
+  INewExerciseData,
+  IExercise,
+  IWorkoutData,
+} from '../types/workouts.types';
 
 const Loader = () => {
   return (

@@ -2,21 +2,20 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
-import WorkoutSearch, { IWorkout } from './WorkoutSearch';
+import WorkoutSearch from './WorkoutSearch';
 import DatePickerField from './DatePickerField';
 import { getCalendarDate } from '../utils';
-
-export interface IScheduleFormData {
-  name: string;
-  date: string;
-}
+import {
+  IWorkout,
+  IScheduleWorkoutData,
+} from '../../workouts/types/workouts.types';
 
 const ScheduleWorkoutForm = ({
   workouts,
   onSubmit,
 }: {
   workouts: IWorkout[];
-  onSubmit: (data: IScheduleFormData) => Promise<void>;
+  onSubmit: (data: IScheduleWorkoutData) => Promise<void>;
 }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -36,7 +35,7 @@ const ScheduleWorkoutForm = ({
     Date.now() - new Date().getTimezoneOffset() * 60000
   );
 
-  const initialValues: IScheduleFormData = {
+  const initialValues: IScheduleWorkoutData = {
     name: '',
     date: getCalendarDate(todayInUtc),
   };

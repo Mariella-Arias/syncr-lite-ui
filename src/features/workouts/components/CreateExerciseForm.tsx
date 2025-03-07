@@ -2,18 +2,7 @@ import { Formik, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../../../components/common/Button';
-
-export interface INewExerciseData {
-  value: string;
-  label: string;
-  user?: number;
-  tracking_param: string;
-}
-
-export interface INewExercise {
-  name: string;
-  parameter: string;
-}
+import { INewExercise } from '../types/workouts.types';
 
 const CreateExerciseForm = ({
   initialName,

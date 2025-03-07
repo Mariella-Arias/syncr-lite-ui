@@ -1,34 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import ScheduleWorkoutForm, { IScheduleFormData } from './ScheduleWorkoutForm';
+import ScheduleWorkoutForm from './ScheduleWorkoutForm';
 import { useSlideInModalContext } from '../../../context/ModalsContext';
-import { useWorkoutsApi } from '../../workouts/hooks/useWorkoutsApi';
-import { IWorkout } from './WorkoutSearch';
+import {
+  IWorkout,
+  IScheduleWorkoutData,
+} from '../../workouts/types/workouts.types';
 import { usePlannerApi } from '../hooks/usePlannerApi';
-
-const Loader = () => {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="border-t-4 border-sky-450 border-solid w-16 h-16 rounded-full animate-spin"></div>
-    </div>
-  );
-};
+import { workouts as workoutsState } from '../../workouts/workoutsSlice';
 
 const ScheduleWorkoutModal = () => {
-  const [workouts, setWorkouts] = useState<IWorkout[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const { close } = useSlideInModalContext();
-  const hasFetched = useRef(false);
-  const { getWorkouts } = useWorkoutsApi();
+  const { workouts }: { workouts: IWorkout[] } = useSelector(workoutsState);
+
   const { scheduleWorkout } = usePlannerApi();
 
-  const handleScheduleWorkout = async (data: IScheduleFormData) => {
+  const handleScheduleWorkout = async (data: IScheduleWorkoutData) => {
     const workout = workouts.find((workout) => workout.name === data.name);
     if (!workout) {
       console.error(`Expected to find workout with name: ${data.name}`);
       return;
     }
-
     const workoutId: number = workout.id;
 
     try {
@@ -36,7 +28,8 @@ const ScheduleWorkoutModal = () => {
         workout: workoutId,
         date_scheduled: data.date,
       });
-      // TODO add success notification
+      // TODO handle successful scheduling
+      // TODO update activity
     } catch (err) {
       console.log(err);
     } finally {
@@ -44,35 +37,13 @@ const ScheduleWorkoutModal = () => {
     }
   };
 
-  const fetchExercises = async () => {
-    try {
-      const response = await getWorkouts();
-      setWorkouts(response);
-    } catch (error) {
-      console.log('Error fetching exercises', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (hasFetched.current) return;
-
-    fetchExercises();
-    hasFetched.current = true;
-  }, [getWorkouts]);
-
   return (
     <div className="px-12 py-8 h-full flex flex-col">
       <p className="font-nunito text-2xl font-bold mb-6">Schedule Workout</p>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <ScheduleWorkoutForm
-          workouts={workouts}
-          onSubmit={handleScheduleWorkout}
-        />
-      )}
+      <ScheduleWorkoutForm
+        workouts={workouts}
+        onSubmit={handleScheduleWorkout}
+      />
     </div>
   );
 };

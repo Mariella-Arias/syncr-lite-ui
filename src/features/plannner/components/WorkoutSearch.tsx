@@ -1,12 +1,7 @@
 import { useState, useRef, ChangeEvent, useEffect } from 'react';
 import { FieldInputProps } from 'formik';
 
-export interface IWorkout {
-  id: number;
-  name: string;
-  created_at: string;
-  user: number;
-}
+import { IWorkout } from '../../workouts/types/workouts.types';
 
 interface WorkoutSearchProps {
   field: FieldInputProps<string>;
@@ -14,7 +9,7 @@ interface WorkoutSearchProps {
   form: {
     setFieldValue: (
       field: string,
-      value: any,
+      value: string,
       shouldValidate?: boolean
     ) => Promise<void>;
     setFieldTouched: (
