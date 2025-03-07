@@ -1,12 +1,12 @@
 import { AxiosError } from 'axios';
 
-import plannerApi, { IScheduleWorkoutData } from '../api/plannerApi';
+import calendarApi, { IScheduleWorkoutData } from '../api/calendarApi';
 import { handleApiError } from '../../../services/api';
 
-export const usePlannerApi = () => {
+export const useCalendarApi = () => {
   const scheduleWorkout = async (data: IScheduleWorkoutData) => {
     try {
-      const response = await plannerApi.scheduleWorkout(data);
+      const response = await calendarApi.scheduleWorkout(data);
       return response;
     } catch (err: unknown) {
       if (err instanceof AxiosError) {

@@ -44,8 +44,3 @@ export interface IWorkout {
   created_at: string;
   user: number;
 }
-
-export interface IScheduleWorkoutData {
-  name: string;
-  date: string;
-}

@@ -5,10 +5,8 @@ import Button from '../../../components/common/Button';
 import WorkoutSearch from './WorkoutSearch';
 import DatePickerField from './DatePickerField';
 import { getCalendarDate } from '../utils';
-import {
-  IWorkout,
-  IScheduleWorkoutData,
-} from '../../workouts/types/workouts.types';
+import { IScheduleWorkoutData } from '../types/calendar.types';
+import { IWorkout } from '../../workouts/types/workouts.types';
 
 const ScheduleWorkoutForm = ({
   workouts,

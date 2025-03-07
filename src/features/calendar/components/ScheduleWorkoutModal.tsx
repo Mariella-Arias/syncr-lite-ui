@@ -2,18 +2,16 @@ import { useSelector } from 'react-redux';
 
 import ScheduleWorkoutForm from './ScheduleWorkoutForm';
 import { useSlideInModalContext } from '../../../context/ModalsContext';
-import {
-  IWorkout,
-  IScheduleWorkoutData,
-} from '../../workouts/types/workouts.types';
-import { usePlannerApi } from '../hooks/usePlannerApi';
+import { IWorkout } from '../../workouts/types/workouts.types';
+import { useCalendarApi } from '../hooks/useCalendarApi';
 import { workouts as workoutsState } from '../../workouts/workoutsSlice';
+import { IScheduleWorkoutData } from '../types/calendar.types';
 
 const ScheduleWorkoutModal = () => {
   const { close } = useSlideInModalContext();
   const { workouts }: { workouts: IWorkout[] } = useSelector(workoutsState);
 
-  const { scheduleWorkout } = usePlannerApi();
+  const { scheduleWorkout } = useCalendarApi();
 
   const handleScheduleWorkout = async (data: IScheduleWorkoutData) => {
     const workout = workouts.find((workout) => workout.name === data.name);
