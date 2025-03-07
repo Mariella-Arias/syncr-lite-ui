@@ -1,15 +1,14 @@
 import api from '../../../services/api';
-import { IWorkoutData } from '../components/CreateWorkoutForm';
-import { INewExerciseData } from '../components/CreateExerciseForm';
+import { INewExerciseData, IWorkoutData } from '../types/workouts.types';
 
 const workoutsApi = {
-  getExercises: async () => {
-    const response = await api.get('workouts/exercises/');
+  createExercise: async (data: INewExerciseData) => {
+    const response = await api.post('workouts/exercises/', data);
     return response;
   },
 
-  createExercise: async (data: INewExerciseData) => {
-    const response = await api.post('workouts/exercises/', data);
+  getExercises: async () => {
+    const response = await api.get('workouts/exercises/');
     return response;
   },
 
@@ -18,13 +17,13 @@ const workoutsApi = {
     return response;
   },
 
-  getWorkouts: async () => {
-    const response = await api.get('workouts/');
+  createWorkout: async (data: IWorkoutData) => {
+    const response = await api.post('workouts/', data);
     return response;
   },
 
-  createWorkout: async (data: IWorkoutData) => {
-    const response = await api.post('workouts/', data);
+  getWorkouts: async () => {
+    const response = await api.get('workouts/');
     return response;
   },
 
