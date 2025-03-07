@@ -95,7 +95,7 @@ const CreateWorkoutForm = ({
         }
       }}
     >
-      {({ isSubmitting, values, errors }) => {
+      {({ isSubmitting, values }) => {
         return (
           <Form className="flex flex-col h-full">
             <div className="flex flex-col flex-1 gap-4">
