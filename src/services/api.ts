@@ -35,6 +35,10 @@ const api = {
     });
     return response.data;
   },
+  put: async <T>(url: string, data = {}, config = {}): Promise<any> => {
+    const response = await instance.post<ApiResponse<T>>(url, data, config);
+    return response.data;
+  },
 };
 
 export const handleApiError = (error: AxiosError<ApiResponse>): ApiError => {
