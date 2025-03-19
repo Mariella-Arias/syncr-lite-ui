@@ -35,7 +35,7 @@ const DeleteAccountForm = ({
       }}
     >
       {({ isSubmitting }) => (
-        <Form className="flex flex-col gap-2">
+        <Form className="flex flex-col gap-3">
           <div className="flex flex-col w-full">
             <Field
               name="current_password"
