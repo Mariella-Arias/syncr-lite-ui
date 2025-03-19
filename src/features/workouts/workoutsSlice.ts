@@ -2,25 +2,37 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../app/store';
 import { useWorkoutsApi } from './hooks/useWorkoutsApi';
+import { IWorkout, IExercise } from './types/workouts.types';
 
-const initialState = {
+interface WorkoutsSlice {
+  workouts: IWorkout[];
+  exercises: IExercise[];
+}
+
+const initialState: WorkoutsSlice = {
   workouts: [],
   exercises: [],
 };
 
-export const setWorkouts = createAsyncThunk('auth/setWorkouts', async () => {
-  const { getWorkouts } = useWorkoutsApi();
+export const setWorkouts = createAsyncThunk<IWorkout[]>(
+  'auth/setWorkouts',
+  async () => {
+    const { getWorkouts } = useWorkoutsApi();
 
-  const response = await getWorkouts();
-  return response;
-});
+    const response = await getWorkouts();
+    return response;
+  }
+);
 
-export const setExercises = createAsyncThunk('auth/setExercises', async () => {
-  const { getExercises } = useWorkoutsApi();
+export const setExercises = createAsyncThunk<IExercise[]>(
+  'auth/setExercises',
+  async () => {
+    const { getExercises } = useWorkoutsApi();
 
-  const response = await getExercises();
-  return response;
-});
+    const response = await getExercises();
+    return response;
+  }
+);
 
 const workoutsSlice = createSlice({
   name: 'workouts',
