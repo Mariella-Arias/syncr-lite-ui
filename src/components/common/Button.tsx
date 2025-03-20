@@ -2,6 +2,8 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+type ButtonProps = VariantProps<typeof button> & ComponentProps<'button'>;
+
 const button = cva(['font-semibold', 'rounded-[10px]', 'p-2'], {
   variants: {
     intent: {
@@ -14,8 +16,6 @@ const button = cva(['font-semibold', 'rounded-[10px]', 'p-2'], {
   compoundVariants: [],
   defaultVariants: { intent: 'primary', size: 'small', disabled: false },
 });
-
-type ButtonProps = VariantProps<typeof button> & ComponentProps<'button'>;
 
 const Button = ({
   intent,
