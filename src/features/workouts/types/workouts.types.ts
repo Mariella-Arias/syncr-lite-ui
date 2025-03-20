@@ -43,4 +43,5 @@ export interface IWorkout {
   name: string;
   created_at: string;
   user: number;
+  exercise_count: number;
 }
