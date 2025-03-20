@@ -37,7 +37,7 @@ const Navbar = () => {
   const { user } = useSelector(auth);
 
   return (
-    <div className="w-full p-2 mb-2 flex flex-wrap md:flex-nowrap items-center justify-between">
+    <div className="w-full p-2 flex flex-wrap md:flex-nowrap items-center justify-between ">
       {/* User Settings on small screens */}
       <div className="flex w-full items-center justify-between md:w-fit">
         <img
