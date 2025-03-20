@@ -5,8 +5,20 @@
   --font-nunito: 'Nunito Sans', sans-serif;
 
   --color-red-550: rgb(235, 51, 35, 100);
+  --color-red-hover: rgb(205, 64, 52, 100);
   --color-sky-250: rgb(165, 212, 247, 100);
   --color-sky-450: rgb(65, 154, 242, 100);
   --color-body-text: rgb(105, 105, 105, 100);
-  --color-border: rgb(206, 205, 205, 100);
+  --color-input-border: rgb(206, 205, 205, 100);
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
