@@ -312,7 +312,11 @@ const CreateWorkoutForm = ({
             </div>
 
             {/* Create Workout button */}
-            <Button type="submit" size="medium" className="w-full text-lg">
+            <Button
+              type="submit"
+              size="medium"
+              className="w-full text-lg"
+            >
               <div className="flex items-center justify-center h-full w-full">
                 {isSubmitting ? (
                   <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
