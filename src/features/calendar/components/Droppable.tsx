@@ -9,15 +9,14 @@ const Droppable = ({ children, id }: { children: ReactNode; id: string }) => {
   return (
     <div
       ref={setNodeRef}
-      //   className={`${isOver ? 'bg-green-100 rounded-md' : ''}`}
       className={`
-        p-4 my-4 border-2 rounded-md min-h-[100px]
-        ${
-          isOver
-            ? 'bg-green-100 border-green-500'
-            : 'bg-gray-100 border-gray-300'
-        }
-      `}
+            border-1 min-h-[100px]
+            ${
+              isOver
+                ? 'border-2  border-sky-450'
+                : 'bg-white border-input-border border-t-0'
+            }
+          `}
     >
       {children}
     </div>
