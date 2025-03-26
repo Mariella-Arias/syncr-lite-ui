@@ -9,15 +9,23 @@ interface WorkoutCardProps {
 }
 
 const WorkoutCard = ({ id, name, exercise_count: count }: WorkoutCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: id,
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    isDragging,
+    over,
+  } = useDraggable({
+    id: id,
+  });
 
   const style = transform
     ? {
         transform: CSS.Translate.toString(transform),
-        opacity: isDragging ? 0.4 : 1,
+        opacity: isDragging ? 0.7 : 1,
+        border: over ? '2px #41A4F2 solid' : '',
       }
     : undefined;
 
@@ -28,7 +36,11 @@ const WorkoutCard = ({ id, name, exercise_count: count }: WorkoutCardProps) => {
       className="border-1 p-2 border-input-border rounded-[10px] shadow-md flex items-center justify-center w-60 h-24 relative overflow-hidden"
     >
       <div className="flex items-center gap-2 w-full">
-        <div {...listeners} {...attributes}>
+        <div
+          ref={setActivatorNodeRef}
+          {...listeners}
+          {...attributes}
+        >
           <GripVertical
             color="#CECDCD"
             size={24}
@@ -45,7 +57,10 @@ const WorkoutCard = ({ id, name, exercise_count: count }: WorkoutCardProps) => {
           </p>
         </div>
 
-        <EllipsisVertical size={24} className=" cursor-pointer" />
+        <EllipsisVertical
+          size={24}
+          className=" cursor-pointer"
+        />
       </div>
 
       <button className="text-[#AAAAAA] text-xs cursor-pointer absolute right-4 bottom-1 p-1">
