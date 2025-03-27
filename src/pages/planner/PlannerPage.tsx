@@ -1,24 +1,21 @@
-import { useState } from 'react';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 
 import Workouts from '../../features/workouts/components/Workouts';
 import Calendar from '../../features/calendar/components/Calendar';
+import { useCalendarApi } from '../../features/calendar/hooks/useCalendarApi';
 
 const PlannerPage = () => {
-  // TODO: move workout placements to redux
-  const [workoutPlacements, setWorkoutPlacements] = useState<
-    Record<string, string>
-  >({});
+  const { scheduleWorkout } = useCalendarApi();
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
-
+    console.log(event);
     if (!over) return;
 
-    const workoutId = active.id.toString();
+    const workoutId = active.id as number;
     const containerId = over.id.toString();
 
-    // TODO: Update workout placement in container
+    await scheduleWorkout({ workout: workoutId, date_scheduled: containerId });
   };
 
   return (
