@@ -1,7 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 
-import Droppable from './Droppable';
-
+import { getCalendarDate } from '../utils';
 interface ICalendarDay {
   currentMonth: boolean;
   date: Date;
@@ -41,35 +40,53 @@ const CalendarDays = ({
   days: ICalendarDay[];
   today: Date;
 }) => {
+  return (
+    <div>
+      {days.map((day, idx) => {
+        return (
+          <CalendarDay
+            key={idx}
+            index={idx}
+            day={day}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+const CalendarDay = ({ day, index }: { day: ICalendarDay; index: number }) => {
+  const { isOver, setNodeRef } = useDroppable({
+    id: getCalendarDate(day.date),
+  });
+
   const getAbbreviatedMonth = (index: number) => {
     return MONTHS_ABBREVIATED[index];
   };
 
   return (
-    <div>
-      {days.map((day, idx) => {
-        return (
-          <Droppable
-            key={idx}
-            id={idx}
-          >
-            <div className="h-20">
-              <p
-                className={`py-0.5 text-center ${
-                  day.date.toDateString() === today.toDateString()
-                    ? 'bg-sky-450 text-white'
-                    : 'bg-sky-250'
-                }`}
-              >
-                {day.date.toDateString() === today.toDateString()
-                  ? 'Today'
-                  : WEEKDAYS[idx % WEEKDAYS.length]}
-                , {getAbbreviatedMonth(day.month)} {day.number}
-              </p>
-            </div>
-          </Droppable>
-        );
-      })}
+    <div
+      ref={setNodeRef}
+      className={`${
+        isOver
+          ? 'border-2  border-sky-450'
+          : 'bg-white border-input-border border-t-0'
+      }`}
+    >
+      <div className="h-20">
+        <p
+          className={`py-0.5 text-center ${
+            day.date.toDateString() === new Date().toDateString()
+              ? 'bg-sky-450 text-white'
+              : 'bg-sky-250'
+          }`}
+        >
+          {day.date.toDateString() === new Date().toDateString()
+            ? 'Today'
+            : WEEKDAYS[index % WEEKDAYS.length]}
+          , {getAbbreviatedMonth(day.month)} {day.number}
+        </p>
+      </div>
     </div>
   );
 };
