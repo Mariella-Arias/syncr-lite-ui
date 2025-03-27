@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 
-const Droppable = ({ children, id }: { children: ReactNode; id: string }) => {
+const Droppable = ({ children, id }: { children: ReactNode; id: number }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: id,
   });
@@ -9,14 +9,11 @@ const Droppable = ({ children, id }: { children: ReactNode; id: string }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`
-            border-1 min-h-[100px]
-            ${
-              isOver
-                ? 'border-2  border-sky-450'
-                : 'bg-white border-input-border border-t-0'
-            }
-          `}
+      className={`${
+        isOver
+          ? 'border-2  border-sky-450'
+          : 'bg-white border-input-border border-t-0'
+      }`}
     >
       {children}
     </div>
