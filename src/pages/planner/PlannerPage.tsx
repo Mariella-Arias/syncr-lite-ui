@@ -62,7 +62,6 @@ const PlannerPage = () => {
         <div className="flex-1">
           <Calendar
             calendarDays={calendarDays}
-            refreshSchedule={updateScheduledWorkouts}
             onDeleteActivity={handleDeleteActivity}
           />
         </div>
