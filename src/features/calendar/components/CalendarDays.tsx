@@ -1,53 +1,39 @@
 import { useDroppable } from '@dnd-kit/core';
+import { useSelector } from 'react-redux';
+import { X } from 'lucide-react';
 
 import { getCalendarDate } from '../utils';
-interface ICalendarDay {
-  currentMonth: boolean;
-  date: Date;
-  month: number;
-  number: number;
-  year: number;
-}
-
-const WEEKDAYS = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
-
-const MONTHS_ABBREVIATED = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-];
+import { calendar } from '../calendarSlice';
+import { workouts as workoutList } from '../../workouts/workoutsSlice';
+import { IActivityEntry } from '../../activity/types/activity.types';
+import { ICalendarDay } from '../types/calendar.types';
+import { WEEKDAYS, MONTHS_ABBREVIATED } from '../constants';
 
 const CalendarDays = ({
   days,
-  today,
+  onActivityDelete,
 }: {
   days: ICalendarDay[];
-  today: Date;
+  onActivityDelete: (id: number) => Promise<void>;
 }) => {
+  const { scheduledWorkouts: activity } = useSelector(calendar);
+
   return (
     <div>
       {days.map((day, idx) => {
+        // Find the workouts that are scheduled for the day
+        const workoutsInDay = activity.filter(
+          (activityEntry) =>
+            activityEntry.date_scheduled === getCalendarDate(day.date)
+        );
+
         return (
           <CalendarDay
             key={idx}
             index={idx}
             day={day}
+            workoutsInDay={workoutsInDay}
+            onDelete={onActivityDelete}
           />
         );
       })}
@@ -55,14 +41,32 @@ const CalendarDays = ({
   );
 };
 
-const CalendarDay = ({ day, index }: { day: ICalendarDay; index: number }) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id: getCalendarDate(day.date),
-  });
+const CalendarDay = ({
+  index,
+  day,
+  workoutsInDay,
+  onDelete,
+}: {
+  index: number;
+  day: ICalendarDay;
+  workoutsInDay: IActivityEntry[];
+  onDelete: (id: number) => void;
+}) => {
+  const { workouts } = useSelector(workoutList);
 
-  const getAbbreviatedMonth = (index: number) => {
-    return MONTHS_ABBREVIATED[index];
-  };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const dayDate = new Date(day.date);
+  dayDate.setHours(0, 0, 0, 0);
+
+  const isPastDate = dayDate < today;
+  const calendarDayId = getCalendarDate(day.date);
+
+  const { isOver, setNodeRef } = useDroppable({
+    id: calendarDayId,
+    disabled: isPastDate,
+  });
 
   return (
     <div
@@ -71,21 +75,50 @@ const CalendarDay = ({ day, index }: { day: ICalendarDay; index: number }) => {
         isOver
           ? 'border-2  border-sky-450'
           : 'bg-white border-input-border border-t-0'
-      }`}
+      } ${isPastDate ? 'opacity-50' : ''}`}
     >
       <div className="h-20">
+        {/* DAY HEADER */}
         <p
           className={`py-0.5 text-center ${
-            day.date.toDateString() === new Date().toDateString()
+            dayDate.toDateString() === today.toDateString()
               ? 'bg-sky-450 text-white'
               : 'bg-sky-250'
-          }`}
+          } `}
         >
-          {day.date.toDateString() === new Date().toDateString()
+          {dayDate.toDateString() === today.toDateString()
             ? 'Today'
             : WEEKDAYS[index % WEEKDAYS.length]}
-          , {getAbbreviatedMonth(day.month)} {day.number}
+          , {MONTHS_ABBREVIATED[day.month]} {day.number}
         </p>
+
+        {/* DAY BODY */}
+        <div className="flex gap-2">
+          {workoutsInDay.map((workoutInDay, idx) => {
+            const workoutName: string =
+              workouts.find((workout) => workout.id === workoutInDay.workout)
+                ?.name || '';
+
+            return (
+              <div
+                key={idx}
+                className="bg-white rounded-[10px] shadow-md w-45 flex items-center justify-between py-1"
+              >
+                <p className="font-bold ml-3">{workoutName}</p>
+                {!isPastDate && (
+                  <button
+                    onClick={() => {
+                      onDelete(workoutInDay.id);
+                    }}
+                    className="cursor-pointer rounded-[10px] p-3 hover:bg-neutral-100"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

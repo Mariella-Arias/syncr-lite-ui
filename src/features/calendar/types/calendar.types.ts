@@ -1,4 +1,7 @@
-export interface IScheduleWorkoutData {
-  name: string;
-  date: string;
+export interface ICalendarDay {
+  currentMonth: boolean;
+  date: Date;
+  month: number;
+  number: number;
+  year: number;
 }
