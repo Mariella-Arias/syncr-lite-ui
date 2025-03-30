@@ -1,30 +1,156 @@
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { MoveRight } from 'lucide-react';
+import { Link } from 'react-router';
+
 import Button from '../../components/common/Button';
 import CreateWorkoutModal from '../../features/workouts/components/CreateWorkoutModal';
 import { useSlideInModalContext } from '../../context/ModalsContext';
 import ScheduleWorkoutModal from '../../features/calendar/components/ScheduleWorkoutModal';
+import WorkoutCard from '../../features/workouts/components/WorkoutCard';
+import {
+  WEEKDAYS,
+  MONTHS_ABBREVIATED,
+} from '../../features/calendar/constants';
+import { workouts as userWorkouts } from '../../features/workouts/workoutsSlice';
+import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
+import { IActivityEntry } from '../../features/activity/types/activity.types';
+import ActivityItem from '../../features/activity/components/ActivityItem';
 
 const DashboardPage = () => {
+  const today = new Date();
+
+  // TODO: replace sample data
+  const workoutOfTheDay = {
+    id: 1,
+    name: "Today's workout",
+    exerciseCount: 5,
+  };
+
   const { open: openSlideIn } = useSlideInModalContext();
 
+  const { workouts } = useSelector(userWorkouts);
+
+  const [recentActivity, setRecentActivity] = useState<IActivityEntry[]>([]);
+
+  const { getRecentActivity } = useActivityApi();
+
+  const fetchActivity = async () => {
+    const response = await getRecentActivity();
+    setRecentActivity(response);
+  };
+
+  useEffect(() => {
+    fetchActivity();
+  }, []);
+
   return (
-    <div className="flex justify-center">
-      <p className="text-2xl">DASHBOARD PAGE</p>
-      <Button
-        onClick={() => {
-          openSlideIn(<CreateWorkoutModal />);
-        }}
-        size="medium"
-      >
-        Create New Workout
-      </Button>
-      <Button
-        onClick={() => {
-          openSlideIn(<ScheduleWorkoutModal />);
-        }}
-        size="medium"
-      >
-        Schedule Workout
-      </Button>
+    <div className="p-6 md:px-45">
+      {/* Today */}
+      <div className="flex justify-end mb-2">
+        <p className="">
+          {WEEKDAYS[today.getDay()]}, {MONTHS_ABBREVIATED[today.getMonth()]}{' '}
+          {today.getDate()}, {today.getFullYear()}
+        </p>
+      </div>
+      {/* Quick Links */}
+      <div className="flex md:justify-end mb-6">
+        <div className="">
+          <p className="text-xl my-2">Quick Links</p>
+          <div className="flex gap-4">
+            <Button
+              onClick={() => {
+                openSlideIn(<CreateWorkoutModal />);
+              }}
+              size="medium"
+            >
+              Create New Workout
+            </Button>
+            <Button
+              onClick={() => {
+                openSlideIn(<ScheduleWorkoutModal />);
+              }}
+              size="medium"
+            >
+              Schedule Workout
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Upcoming Schedule */}
+      <p className="font-nunito font-bold text-2xl mb-2">On Schedule Today</p>
+      {workoutOfTheDay && (
+        <WorkoutCard
+          id={workoutOfTheDay.id}
+          name={workoutOfTheDay.name}
+          exercise_count={workoutOfTheDay.exerciseCount}
+        />
+      )}
+
+      {!workoutOfTheDay && (
+        <div className="border border-input-border rounded-[10px] flex flex-col items-center py-6">
+          <p className="text-body-text text-lg font-nunito">
+            No workouts scheduled for today
+          </p>
+          <Link
+            to="/planner"
+            className="text-red-550 hover:font-semibold flex gap-2 items-center w-fit"
+          >
+            <p className="">Add today's workout</p>
+            <MoveRight strokeWidth={1.2} />
+          </Link>
+        </div>
+      )}
+
+      {/* Activity */}
+      <p className="font-nunito font-bold text-2xl mb-2 mt-6">
+        Recent Activity
+      </p>
+
+      {/* Empty Activity component */}
+      {!recentActivity.length && (
+        <div className="border border-input-border rounded-[10px] flex flex-col items-center py-6">
+          <p className="text-body-text text-lg font-nunito">
+            No recent activity
+          </p>
+          <Link
+            to="/planner"
+            className="text-red-550 hover:font-semibold flex gap-2 items-center w-fit"
+          >
+            <p className="">Visit planner to get started</p>
+            <MoveRight strokeWidth={1.2} />
+          </Link>
+        </div>
+      )}
+
+      {recentActivity.map((entry, idx) => {
+        const workout = workouts.find(
+          (workout) => workout.id === entry.workout
+        );
+        const name = workout?.name || '';
+        const count = workout?.exercise_count || 0;
+        const dateScheduled = new Date(entry.date_scheduled);
+
+        return (
+          <ActivityItem
+            key={idx}
+            name={name}
+            count={count}
+            date={dateScheduled}
+          />
+        );
+      })}
+
+      <div className="flex justify-end items-center">
+        <p className="text-body-text text-sm">View All</p>
+        <Link
+          to="/activity"
+          className="text-xs cursor-pointer size-10 flex items-center justify-center rounded-[10px] hover:bg-neutral-100"
+        >
+          <MoveRight strokeWidth={1} />
+        </Link>
+      </div>
     </div>
   );
 };

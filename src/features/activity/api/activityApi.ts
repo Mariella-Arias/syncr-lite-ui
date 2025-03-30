@@ -11,6 +11,12 @@ const activityApi = {
     return response;
   },
 
+  getRecentActivity: async () => {
+    const response = await api.get('workouts/activity/?type=recent');
+
+    return response;
+  },
+
   getActivityPeriod: async ({
     start_date = '',
     end_date = '',
@@ -19,7 +25,7 @@ const activityApi = {
     end_date: string | undefined;
   }) => {
     const response = await api.get(
-      `workouts/activity/?start_date=${start_date}&end_date=${end_date}`
+      `workouts/activity/?type=period?start_date=${start_date}&end_date=${end_date}`
     );
 
     return response;

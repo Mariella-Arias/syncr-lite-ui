@@ -24,6 +24,17 @@ export const useActivityApi = () => {
     }
   };
 
+  const getRecentActivity = async () => {
+    try {
+      const response = await activityApi.getRecentActivity();
+      return response;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
   const getActivityPeriod = async ({
     start_date,
     end_date,
@@ -59,6 +70,7 @@ export const useActivityApi = () => {
 
   return {
     scheduleWorkout,
+    getRecentActivity,
     getActivityPeriod,
     deleteActivity,
   };
