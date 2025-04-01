@@ -16,16 +16,10 @@ import { workouts as userWorkouts } from '../../features/workouts/workoutsSlice'
 import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
 import { IActivityEntry } from '../../features/activity/types/activity.types';
 import ActivityItem from '../../features/activity/components/ActivityItem';
+import { getCalendarDate } from '../../features/calendar/utils';
 
 const DashboardPage = () => {
   const today = new Date();
-
-  // TODO: replace sample data
-  const workoutOfTheDay = {
-    id: 1,
-    name: "Today's workout",
-    exerciseCount: 5,
-  };
 
   const { open: openSlideIn } = useSlideInModalContext();
 
@@ -35,6 +29,17 @@ const DashboardPage = () => {
 
   const { getRecentActivity } = useActivityApi();
 
+  const activityToday = recentActivity.find(
+    (entry) => entry.date_scheduled === getCalendarDate(today)
+  );
+  const workoutToday = workouts.find((workout) => {
+    if (activityToday) {
+      return activityToday.workout === workout.id;
+    }
+    return;
+  });
+
+  // Fetch the three most recent activity entries
   const fetchActivity = async () => {
     const response = await getRecentActivity();
     setRecentActivity(response);
@@ -80,15 +85,16 @@ const DashboardPage = () => {
 
       {/* Upcoming Schedule */}
       <p className="font-nunito font-bold text-2xl mb-2">On Schedule Today</p>
-      {workoutOfTheDay && (
+
+      {workoutToday && (
         <WorkoutCard
-          id={workoutOfTheDay.id}
-          name={workoutOfTheDay.name}
-          exercise_count={workoutOfTheDay.exerciseCount}
+          id={workoutToday.id}
+          name={workoutToday.name}
+          exercise_count={workoutToday.exercise_count}
         />
       )}
 
-      {!workoutOfTheDay && (
+      {!workoutToday && (
         <div className="border border-input-border rounded-[10px] flex flex-col items-center py-6">
           <p className="text-body-text text-lg font-nunito">
             No workouts scheduled for today
