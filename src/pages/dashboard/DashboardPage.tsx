@@ -39,7 +39,7 @@ const DashboardPage = () => {
     return;
   });
 
-  // Fetch the three most recent activity entries
+  // Fetch the most recent activity entries (3)
   const fetchActivity = async () => {
     const response = await getRecentActivity();
     setRecentActivity(response);
@@ -110,9 +110,16 @@ const DashboardPage = () => {
       )}
 
       {/* Activity */}
-      <p className="font-nunito font-bold text-2xl mb-2 mt-6">
-        Recent Activity
-      </p>
+      <div className="flex justify-between mb-2 mt-6">
+        <p className="font-nunito font-bold text-2xl">Recent Activity</p>
+        <Link
+          to="/activity"
+          className="text-xs cursor-pointer flex items-center gap-2 rounded-[10px] hover:bg-neutral-100"
+        >
+          <p className="text-body-text text-sm">View All</p>
+          <MoveRight strokeWidth={1} />
+        </Link>
+      </div>
 
       {/* Empty Activity component */}
       {!recentActivity.length && (
@@ -147,16 +154,6 @@ const DashboardPage = () => {
           />
         );
       })}
-
-      <div className="flex justify-end items-center">
-        <p className="text-body-text text-sm">View All</p>
-        <Link
-          to="/activity"
-          className="text-xs cursor-pointer size-10 flex items-center justify-center rounded-[10px] hover:bg-neutral-100"
-        >
-          <MoveRight strokeWidth={1} />
-        </Link>
-      </div>
     </div>
   );
 };
