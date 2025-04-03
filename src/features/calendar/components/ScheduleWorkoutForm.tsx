@@ -5,7 +5,7 @@ import Button from '../../../components/common/Button';
 import WorkoutSearch from './WorkoutSearch';
 import DatePickerField from './DatePickerField';
 import { getCalendarDate } from '../utils';
-import { IScheduleWorkoutData } from '../types/calendar.types';
+import { IScheduleWorkoutData } from '../../activity/types/activity.types';
 import { IWorkout } from '../../workouts/types/workouts.types';
 
 const ScheduleWorkoutForm = ({
@@ -78,7 +78,11 @@ const ScheduleWorkoutForm = ({
                 <label className="text-lg text-body-text font-semibold">
                   To Complete On:
                 </label>
-                <Field name="date" type="date" component={DatePickerField} />
+                <Field
+                  name="date"
+                  type="date"
+                  component={DatePickerField}
+                />
                 <ErrorMessage
                   name="date"
                   component="div"
@@ -86,7 +90,11 @@ const ScheduleWorkoutForm = ({
                 />
               </div>
             </div>
-            <Button type="submit" size="medium" className="text-lg">
+            <Button
+              type="submit"
+              size="medium"
+              className="text-lg"
+            >
               <div className="flex items-center justify-center h-full w-full">
                 {isSubmitting ? (
                   <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
