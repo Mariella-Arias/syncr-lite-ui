@@ -5,7 +5,7 @@ import { useSlideInModalContext } from '../../../context/ModalsContext';
 import { IWorkout } from '../../workouts/types/workouts.types';
 import { useCalendarApi } from '../hooks/useCalendarApi';
 import { workouts as workoutsState } from '../../workouts/workoutsSlice';
-import { IScheduleWorkoutData } from '../types/calendar.types';
+import { IScheduleWorkoutData } from '../../activity/types/activity.types';
 
 const ScheduleWorkoutModal = () => {
   const { close } = useSlideInModalContext();
