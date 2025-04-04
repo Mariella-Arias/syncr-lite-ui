@@ -25,7 +25,7 @@ const activityApi = {
     end_date: string | undefined;
   }) => {
     const response = await api.get(
-      `workouts/activity/?type=period?start_date=${start_date}&end_date=${end_date}`
+      `workouts/activity/?type=period&start_date=${start_date}&end_date=${end_date}`
     );
 
     return response;
