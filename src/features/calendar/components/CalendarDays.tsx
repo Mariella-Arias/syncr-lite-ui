@@ -19,7 +19,7 @@ const CalendarDays = ({
   const { scheduledWorkouts: activity } = useSelector(calendar);
 
   return (
-    <div>
+    <div className="flex-1 overflow-y-auto">
       {days.map((day, idx) => {
         // Find the workouts that are scheduled for the day
         const workoutsInDay = activity.filter(
@@ -74,51 +74,54 @@ const CalendarDay = ({
       className={`${
         isOver
           ? 'border-2  border-sky-450'
-          : 'bg-white border-input-border border-t-0'
-      } ${isPastDate ? 'opacity-50' : ''}`}
+          : 'bg-white border-l border-r border-input-border border-t-0'
+      } ${isPastDate ? 'opacity-50' : ''} ${
+        index === 6 ? 'border-b rounded-b-[10px]' : ''
+      }`}
     >
-      <div className="h-20">
-        {/* DAY HEADER */}
-        <p
-          className={`py-0.5 text-center ${
-            dayDate.toDateString() === today.toDateString()
-              ? 'bg-sky-450 text-white'
-              : 'bg-sky-250'
-          } `}
-        >
-          {dayDate.toDateString() === today.toDateString()
-            ? 'Today'
-            : WEEKDAYS[index % WEEKDAYS.length]}
-          , {MONTHS_ABBREVIATED[day.month]} {day.number}
-        </p>
+      {/* DAY HEADER */}
+      <p
+        className={`py-0.5 text-center ${
+          dayDate.toDateString() === today.toDateString()
+            ? 'bg-sky-450 text-white'
+            : 'bg-sky-250'
+        } `}
+      >
+        {dayDate.toDateString() === today.toDateString()
+          ? 'Today'
+          : WEEKDAYS[index % WEEKDAYS.length]}
+        , {MONTHS_ABBREVIATED[day.month]} {day.number}
+      </p>
 
-        {/* DAY BODY */}
-        <div className="flex gap-2">
-          {workoutsInDay.map((workoutInDay, idx) => {
-            const workoutName: string =
-              workouts.find((workout) => workout.id === workoutInDay.workout)
-                ?.name || '';
+      {/* DAY BODY */}
+      <div className="flex items-center gap-1 min-h-12 flex-1 overflow-x-auto no-scrollbar">
+        {workoutsInDay.map((workoutInDay, idx) => {
+          const workoutName: string =
+            workouts.find((workout) => workout.id === workoutInDay.workout)
+              ?.name || '';
 
-            return (
-              <div
-                key={idx}
-                className="bg-white rounded-[10px] shadow-md w-45 flex items-center justify-between py-1"
-              >
-                <p className="font-bold ml-3">{workoutName}</p>
-                {!isPastDate && (
-                  <button
-                    onClick={() => {
-                      onDelete(workoutInDay.id);
-                    }}
-                    className="cursor-pointer rounded-[10px] p-3 hover:bg-neutral-100"
-                  >
-                    <X size={18} />
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
+          return (
+            <div
+              key={idx}
+              className="bg-white rounded-[10px] shadow-md w-37 h-10 flex items-center justify-between border border-input-border"
+            >
+              <p className="font-nunito font-bold ml-3 max-w-24 truncate">
+                {workoutName}
+              </p>
+
+              {!isPastDate && (
+                <button
+                  onClick={() => {
+                    onDelete(workoutInDay.id);
+                  }}
+                  className="cursor-pointer rounded-[10px] p-2 hover:bg-neutral-100"
+                >
+                  <X size={18} />
+                </button>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

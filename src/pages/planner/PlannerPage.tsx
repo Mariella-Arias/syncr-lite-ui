@@ -57,16 +57,14 @@ const PlannerPage = () => {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div className="flex w-full h-full overflow-auto">
-        {/* CALENDAR: droppable */}
-        <div className="flex-1">
+      <div className="flex flex-col md:flex-row h-full overflow-hidden">
+        <div className="h-1/2 md:h-full md:w-1/2 overflow-hidden">
           <Calendar
             calendarDays={calendarDays}
             onDeleteActivity={handleDeleteActivity}
           />
         </div>
-        {/* WORKOUTS: draggable */}
-        <div className="flex-1">
+        <div className="h-1/2 md:h-full md:w-1/2">
           <Workouts />
         </div>
       </div>
