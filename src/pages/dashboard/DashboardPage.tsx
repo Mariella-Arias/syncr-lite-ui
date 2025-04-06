@@ -91,6 +91,7 @@ const DashboardPage = () => {
           id={workoutToday.id}
           name={workoutToday.name}
           exercise_count={workoutToday.exercise_count}
+          isDraggable={false}
         />
       )}
 

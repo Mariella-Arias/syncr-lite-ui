@@ -29,7 +29,7 @@ interface IExerciseData {
   };
 }
 
-interface IBlockData {
+export interface IBlockData {
   exercises: IExerciseData[];
 }
 

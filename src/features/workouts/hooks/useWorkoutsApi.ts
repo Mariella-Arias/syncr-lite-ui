@@ -60,11 +60,23 @@ export const useWorkoutsApi = () => {
     }
   };
 
+  const getWorkout = async ({ id }: { id: number }) => {
+    try {
+      const response = await workoutsApi.getWorkout(id);
+      return response;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
   return {
     createExercise,
     getExercises,
     createWorkout,
     getWorkouts,
     deleteExercise,
+    getWorkout,
   };
 };

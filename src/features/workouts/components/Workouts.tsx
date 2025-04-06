@@ -58,11 +58,12 @@ const Workouts = () => {
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6 justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 md:gap-5">
           {searchResults.map((workout) => (
             <WorkoutCard
               key={workout.id}
               {...workout}
+              isDraggable={true}
             />
           ))}
         </div>
