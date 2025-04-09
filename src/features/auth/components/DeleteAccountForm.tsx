@@ -11,8 +11,10 @@ export interface IDeleteAccountFormData {
 
 const DeleteAccountForm = ({
   handleSubmit,
+  onCancel,
 }: {
   handleSubmit: (data: IDeleteAccountFormData) => Promise<void>;
+  onCancel: () => void;
 }) => {
   const [passwordFieldType, setPasswordFieldType] = useState('password');
   const validationSchema = Yup.object().shape({
@@ -51,15 +53,30 @@ const DeleteAccountForm = ({
               className="text-red-550 text-sm"
             />
           </div>
-          <Button type="submit" size="medium" disabled={isSubmitting}>
-            <div className="flex items-center justify-center h-full w-full">
-              {isSubmitting ? (
-                <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
-              ) : (
-                <span className="text-lg">Delete</span>
-              )}
-            </div>
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => onCancel()}
+              size="medium"
+              intent="outlined"
+              className="w-full"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              size="medium"
+              disabled={isSubmitting}
+              className="w-full"
+            >
+              <div className="flex items-center justify-center h-full w-full">
+                {isSubmitting ? (
+                  <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
+                ) : (
+                  <span className="text-lg">Delete</span>
+                )}
+              </div>
+            </Button>
+          </div>
         </Form>
       )}
     </Formik>
