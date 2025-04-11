@@ -33,12 +33,12 @@ const workoutsApi = {
   },
 
   deleteWorkout: async (id: number) => {
-    const response = await api.get(`workouts/${id}`);
+    const response = await api.delete(`workouts/${id}/`);
     return response;
   },
 
   updateWorkout: async (id: number) => {
-    const response = await api.put(`workouts/${id}`);
+    const response = await api.put(`workouts/${id}/`);
     return response;
   },
 };
