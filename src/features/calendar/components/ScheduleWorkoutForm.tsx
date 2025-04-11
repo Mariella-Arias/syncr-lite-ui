@@ -11,9 +11,11 @@ import { IWorkout } from '../../workouts/types/workouts.types';
 const ScheduleWorkoutForm = ({
   workouts,
   onSubmit,
+  initialValues,
 }: {
   workouts: IWorkout[];
   onSubmit: (data: IScheduleWorkoutData) => Promise<void>;
+  initialValues?: Partial<IScheduleWorkoutData>;
 }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -33,14 +35,19 @@ const ScheduleWorkoutForm = ({
     Date.now() - new Date().getTimezoneOffset() * 60000
   );
 
-  const initialValues: IScheduleWorkoutData = {
+  const defaultValues: IScheduleWorkoutData = {
     name: '',
     date: getCalendarDate(todayInUtc),
   };
 
+  const formInitialValues: IScheduleWorkoutData = {
+    ...defaultValues,
+    ...initialValues,
+  };
+
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formInitialValues}
       validationSchema={validationSchema}
       validateOnChange={true}
       validateOnBlur={true}

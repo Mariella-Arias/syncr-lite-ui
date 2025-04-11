@@ -1,19 +1,54 @@
+// External Dependencies
 import { useSelector } from 'react-redux';
 
+// UI Components
 import ScheduleWorkoutForm from './ScheduleWorkoutForm';
-import { useSlideInModalContext } from '../../../context/ModalsContext';
-import { IWorkout } from '../../workouts/types/workouts.types';
-import { useCalendarApi } from '../hooks/useCalendarApi';
+
+// Redux
 import { workouts as workoutsState } from '../../workouts/workoutsSlice';
+
+// Hooks and Context
+import { useActivityHistory } from '../../activity/hooks/useActivityHistory';
+import { useCalendarActivity } from '../hooks/useCalendarActivity';
+import { useActivityApi } from '../../activity/hooks/useActivityApi';
+import { useSlideInModalContext } from '../../../context/ModalsContext';
+
+// Types
+import { IWorkout } from '../../workouts/types/workouts.types';
 import { IScheduleWorkoutData } from '../../activity/types/activity.types';
 
-const ScheduleWorkoutModal = () => {
+/**
+ * ScheduleWorkoutModal Component
+ *
+ * Modal for scheduling workouts on specific dates with functionality to:
+ * 1. Select a workout from existing workouts
+ * 2. Choose a date for the workout
+ * 3. Create a new activity entry for the scheduled workout
+ *
+ * @param initialFormValues - Optional initial values for the form (workout name and date)
+ */
+const ScheduleWorkoutModal = ({
+  initialFormValues,
+}: {
+  initialFormValues?: { name?: string; date?: string };
+}) => {
+  // CONTEXT
   const { close } = useSlideInModalContext();
+
+  // REDUX
   const { workouts }: { workouts: IWorkout[] } = useSelector(workoutsState);
 
-  const { scheduleWorkout } = useCalendarApi();
+  // HOOKS
+  const { scheduleWorkout } = useActivityApi();
+  const { setScheduledActivity } = useCalendarActivity();
+  const { setActivityHistory } = useActivityHistory();
 
+  /**
+   * Schedules a workout for a specific date and updates relevant state
+   * @param data - Contains the workout name and date to schedule
+   */
   const handleScheduleWorkout = async (data: IScheduleWorkoutData) => {
+    // Find the workout ID based on the selected name
     const workout = workouts.find((workout) => workout.name === data.name);
     if (!workout) {
       console.error(`Expected to find workout with name: ${data.name}`);
@@ -22,12 +57,15 @@ const ScheduleWorkoutModal = () => {
     const workoutId: number = workout.id;
 
     try {
+      // Create the activity entry
       await scheduleWorkout({
         workout: workoutId,
         date_scheduled: data.date,
       });
-      // TODO handle successful scheduling
-      // TODO update activity
+
+      // Update relevant state
+      await setScheduledActivity();
+      await setActivityHistory();
     } catch (err) {
       console.log(err);
     } finally {
@@ -41,6 +79,7 @@ const ScheduleWorkoutModal = () => {
       <ScheduleWorkoutForm
         workouts={workouts}
         onSubmit={handleScheduleWorkout}
+        initialValues={{ ...initialFormValues }}
       />
     </div>
   );
