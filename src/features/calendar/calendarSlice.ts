@@ -17,7 +17,6 @@ const calendarSlice = createSlice({
   reducers: {
     setScheduledWorkouts: (state, action) => {
       state.scheduledWorkouts = action.payload;
-      return state;
     },
   },
 });
