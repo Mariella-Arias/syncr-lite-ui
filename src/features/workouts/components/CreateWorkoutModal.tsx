@@ -1,32 +1,69 @@
+// External Dependencies
 import { useSelector, useDispatch } from 'react-redux';
 
-import { workouts, setExercises, setWorkouts } from '../workoutsSlice';
+// UI Components
 import CreateWorkoutForm from './CreateWorkoutForm';
-import { useWorkoutsApi } from '../hooks/useWorkoutsApi';
+import DeleteExerciseModal from './DeleteExerciseModal';
+
+// Redux
+import { workouts, updateWorkouts, updateExercises } from '../workoutsSlice';
 import {
   useSlideInModalContext,
   useCenteredModalContext,
 } from '../../../context/ModalsContext';
-import DeleteExerciseModal from './DeleteExerciseModal';
+
+// Hooks
+import { useWorkoutsApi } from '../hooks/useWorkoutsApi';
+import { useCalendarActivity } from '../../calendar/hooks/useCalendarActivity';
+import { useActivityHistory } from '../../activity/hooks/useActivityHistory';
+
+// Types
+import { AppDispatch } from '../../../app/store';
 import {
   INewExerciseData,
   IExercise,
   IWorkoutData,
 } from '../types/workouts.types';
-import { AppDispatch } from '../../../app/store';
 
+/**
+ * CreateWorkoutModal Component
+ *
+ * Modal for creating new workouts with functionality to:
+ * 1. Create a new workout with selected exercises
+ * 2. Create new exercises if needed
+ * 3. Delete existing exercises
+ */
 const CreateWorkoutModal = () => {
-  const { createExercise, createWorkout, deleteExercise } = useWorkoutsApi();
+  // API HOOKS
+  const {
+    createExercise,
+    createWorkout,
+    deleteExercise,
+    getWorkouts,
+    getExercises,
+  } = useWorkoutsApi();
+  const { setScheduledActivity } = useCalendarActivity();
+  const { setActivityHistory } = useActivityHistory();
+
+  // MODALS CONTEXT
   const { close: closeSlideInModal } = useSlideInModalContext();
   const { open: openCenteredModal, close: closeCenteredModal } =
     useCenteredModalContext();
-  const { exercises } = useSelector(workouts);
-  const dispatch: AppDispatch = useDispatch();
 
+  // REDUX
+  const dispatch: AppDispatch = useDispatch();
+  const { exercises } = useSelector(workouts);
+
+  /**
+   * Creates a new workout and updates the Redux store
+   * @param values - The workout data to be created
+   */
   const handleCreateWorkout = async (values: IWorkoutData) => {
     try {
       await createWorkout(values);
-      await dispatch(setWorkouts());
+
+      const response = await getWorkouts();
+      dispatch(updateWorkouts(response));
       // TODO: add success notification
     } catch (err) {
       // TODO: add error notification
@@ -36,6 +73,10 @@ const CreateWorkoutModal = () => {
     }
   };
 
+  /**
+   * Shows confirmation modal and handles exercise deletion
+   * @param exercise - The exercise to be deleted
+   */
   const handleDeleteExercise = async (exercise: IExercise) => {
     openCenteredModal(
       <DeleteExerciseModal
@@ -44,7 +85,18 @@ const CreateWorkoutModal = () => {
         onDelete={async () => {
           try {
             await deleteExercise({ id: exercise.id });
-            await dispatch(setExercises());
+
+            // Update exercises list
+            const exercisesRes = await getExercises();
+            dispatch(updateExercises(exercisesRes));
+
+            // Update workouts list
+            const workoutsRes = await getWorkouts();
+            dispatch(updateWorkouts(workoutsRes));
+
+            // Update calendar and activity history
+            await setScheduledActivity();
+            await setActivityHistory();
           } catch (err) {
             console.log(err);
             // TODO: handle error
@@ -56,10 +108,16 @@ const CreateWorkoutModal = () => {
     );
   };
 
+  /**
+   * Creates a new exercise and updates the Redux store
+   * @param data - The exercise data to be created
+   */
   const handleCreateExercise = async (data: INewExerciseData) => {
     try {
       await createExercise(data);
-      await dispatch(setExercises());
+
+      const response = await getExercises();
+      dispatch(updateExercises(response));
     } catch (err) {
       console.log(err);
     }
