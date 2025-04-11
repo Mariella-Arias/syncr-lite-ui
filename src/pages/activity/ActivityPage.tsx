@@ -1,10 +1,24 @@
+// External Dependencies
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
-import { getCalendarDate } from '../../features/calendar/utils';
-import { IActivityEntry } from '../../features/activity/types/activity.types';
+// UI Components
 import ActivityLog from '../../features/activity/components/ActivityLog';
 
+// Redux
+import { activity } from '../../features/activity/activitySlice';
+
+// API Hooks
+import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
+
+// Utils
+import { getCalendarDate } from '../../features/calendar/utils';
+
+/**
+ * Loader Component
+ *
+ * Displays a spinner while content is loading
+ */
 const Loader = () => {
   return (
     <div className="flex justify-center items-center h-screen">
@@ -13,42 +27,41 @@ const Loader = () => {
   );
 };
 
+/**
+ * ActivityPage Component
+ *
+ * Main page for viewing workout activity history with:
+ * 1. Summary of recent activity (last 30 days)
+ * 2. Complete activity history organized by month
+ */
 const ActivityPage = () => {
+  // LOCAL STATE
   const [isFetching, setIsFetching] = useState(true);
+  const [recentWorkoutCount, setRecentWorkoutCount] = useState(0);
 
+  // DATA INITIALIZATION
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // API HOOKS
   const { getActivityPeriod } = useActivityApi();
 
-  const [log, setLog] = useState<IActivityEntry[]>([]);
-  const [recentWorkoutCount, setRecentWorkoutCount] = useState(0);
+  // REDUX
+  const { activityHistory } = useSelector(activity);
 
-  const firstDayOfMonth: Date = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    1
-  );
-  const firstDayOfMonthStr: string = getCalendarDate(firstDayOfMonth);
-
-  const fetchCurrentMonthActivity = async () => {
-    setIsFetching(true);
-    const response = await getActivityPeriod({
-      start_date: firstDayOfMonthStr,
-      end_date: getCalendarDate(today),
-    });
-
-    setLog(response);
-    setIsFetching(false);
-  };
-
+  /**
+   * Fetches activity data for the last 30 days
+   * Updates the recent workout count and loading state
+   */
   const fetchRecentActivity = async () => {
     setIsFetching(true);
+
+    // Calculate date 30 days ago
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
     const thirtyDaysAgoStr = getCalendarDate(thirtyDaysAgo);
 
+    // Fetch activity between 30 days ago and today
     const response = await getActivityPeriod({
       start_date: thirtyDaysAgoStr,
       end_date: getCalendarDate(today),
@@ -58,42 +71,40 @@ const ActivityPage = () => {
     setIsFetching(false);
   };
 
+  // Fetch recent activity on component mount
   useEffect(() => {
-    fetchCurrentMonthActivity();
     fetchRecentActivity();
   }, []);
 
+  // Show loader while fetching data
   if (isFetching) {
     return <Loader />;
   }
 
   return (
-    <div className="p-2 md:px-45">
-      {/* HEADER */}
-      <div className="flex justify-center gap-2 my-6">
-        {/* Last 30 Days */}
-        <div className="border border-input-border rounded-[10px] px-8 py-6 max-w-50">
-          <p className="font-nunito font-semibold text-body-text text-lg">
-            Last 30 Days
-          </p>
-          <p className="font-nunito font-bold text-xl">
-            {recentWorkoutCount} Workouts
-          </p>
-        </div>
-        {/* Current Streak */}
-        <div className="border border-input-border rounded-[10px] px-8 py-6 max-w-50">
-          <p className="font-nunito font-semibold text-body-text text-lg">
-            Current Streak
-          </p>
-          <p className="font-nunito font-bold text-xl">3 Workouts</p>
-        </div>
+    <div className="p-6 md:px-45 h-full flex flex-col">
+      {/* Page Header */}
+      <div className="mb-4">
+        <p className="font-nunito font-bold text-2xl">Activity History</p>
+        <p className="font-nunito text-body-text text-lg">
+          Track your workout progress and completion over time
+        </p>
       </div>
 
-      <ActivityLog log={log} />
+      {/* 30-day Activity Summary */}
+      <div className="border border-input-border rounded-[10px] px-8 py-6 w-full mb-6">
+        <p className="font-nunito font-semibold text-body-text text-lg">
+          Last 30 Days
+        </p>
+        <p className="font-nunito font-bold text-xl">
+          {recentWorkoutCount} Workouts
+        </p>
+      </div>
 
-      <button className="border border-input-border rounded-[10px] p-3 font-nunito text-body-text font-semibold w-full cursor-pointer">
-        Load More
-      </button>
+      {/* Complete Activity History */}
+      <div className="flex-1 h-full overflow-y-auto no-scrollbar">
+        <ActivityLog log={activityHistory} />
+      </div>
     </div>
   );
 };
