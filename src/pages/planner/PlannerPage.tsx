@@ -1,39 +1,36 @@
-import { useEffect } from 'react';
+// External Libraries
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../app/store';
+// UI Components
 import Workouts from '../../features/workouts/components/Workouts';
 import Calendar from '../../features/calendar/components/Calendar';
+
+// Hooks
 import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
-import { setScheduledWorkouts } from '../../features/calendar/calendarSlice';
-import {
-  getCalendarDays,
-  getCalendarDate,
-} from '../../features/calendar/utils';
-
+import { useCalendarActivity } from '../../features/calendar/hooks/useCalendarActivity';
+import { useActivityHistory } from '../../features/activity/hooks/useActivityHistory';
+/**
+ * PlannerPage Component
+ *
+ * Provides an interactive workout planning interface with:
+ * 1. Drag-and-drop functionality to schedule workouts on a calendar
+ * 2. A calendar view showing scheduled workouts
+ * 3. A workouts list that can be dragged onto calendar days
+ */
 const PlannerPage = () => {
-  const { scheduleWorkout, getActivityPeriod, deleteActivity } =
-    useActivityApi();
-  const dispatch: AppDispatch = useDispatch();
+  // INITIALIZATION
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  // A list of 42 calendar days: ICalendarDay[]
-  const calendarDays = getCalendarDays(today);
+  // HOOKS
+  const { setScheduledActivity } = useCalendarActivity();
+  const { setActivityHistory } = useActivityHistory();
+  const { scheduleWorkout, deleteActivity } = useActivityApi();
 
-  const startDate: Date = calendarDays[0].date;
-  const startDateStr: string = getCalendarDate(startDate); // '2025-03-25'
-  const endDate: Date = calendarDays[calendarDays.length - 1].date;
-  const endDateStr: string = getCalendarDate(endDate); // '2025-03-25'
-
-  const updateScheduledWorkouts = async () => {
-    const response = await getActivityPeriod({
-      start_date: startDateStr,
-      end_date: endDateStr,
-    });
-    dispatch(setScheduledWorkouts(response));
-  };
-
+  /**
+   * Handles the end of a drag event
+   * Creates a new activity entry when a workout is dropped on a calendar slot
+   */
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -42,27 +39,27 @@ const PlannerPage = () => {
     const workoutId = active.id as number;
     const containerId = over.id.toString();
 
+    // TODO: limit 3 workouts per calendar slot
+    // Creates a new activity entry
     await scheduleWorkout({ workout: workoutId, date_scheduled: containerId });
-    await updateScheduledWorkouts();
+    await setScheduledActivity();
+    await setActivityHistory();
   };
 
+  /**
+   * Handles deletion of a scheduled workout from the calendar
+   */
   const handleDeleteActivity = async (id: number) => {
     await deleteActivity({ id });
-    await updateScheduledWorkouts();
+    await setScheduledActivity();
+    await setActivityHistory();
   };
-
-  useEffect(() => {
-    updateScheduledWorkouts();
-  }, []);
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div className="flex flex-col md:flex-row h-full overflow-hidden">
         <div className="h-1/2 md:h-full md:w-1/2 overflow-hidden">
-          <Calendar
-            calendarDays={calendarDays}
-            onDeleteActivity={handleDeleteActivity}
-          />
+          <Calendar onDeleteActivity={handleDeleteActivity} />
         </div>
         <div className="h-1/2 md:h-full md:w-1/2">
           <Workouts />
