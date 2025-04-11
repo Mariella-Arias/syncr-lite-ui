@@ -24,6 +24,28 @@ export const useActivityApi = () => {
     }
   };
 
+  const getAllActivity = async () => {
+    try {
+      const response = await activityApi.getAllActivity();
+      return response;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
+  const getActivityHistory = async () => {
+    try {
+      const response = await activityApi.getActivityHistory();
+      return response;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
   const getRecentActivity = async () => {
     try {
       const response = await activityApi.getRecentActivity();
@@ -68,10 +90,33 @@ export const useActivityApi = () => {
     }
   };
 
+  const updateActivity = async ({
+    id,
+    data,
+  }: {
+    id: number;
+    data: Record<string, boolean | string | number>;
+  }) => {
+    try {
+      const response = await activityApi.updateActivity({
+        id,
+        data,
+      });
+      return response;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        throw handleApiError(err);
+      }
+    }
+  };
+
   return {
     scheduleWorkout,
     getRecentActivity,
     getActivityPeriod,
     deleteActivity,
+    getAllActivity,
+    updateActivity,
+    getActivityHistory,
   };
 };
