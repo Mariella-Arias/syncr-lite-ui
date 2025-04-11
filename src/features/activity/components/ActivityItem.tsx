@@ -1,5 +1,19 @@
+// Constants
 import { MONTHS_ABBREVIATED } from '../../calendar/constants';
 
+/**
+ * ActivityItem Component
+ *
+ * Displays a single workout activity entry with:
+ * 1. Completion status indicator (if applicable)
+ * 2. Workout name
+ * 3. Exercise count and formatted date
+ *
+ * @param name - Name of the workout
+ * @param count - Number of exercises in the workout
+ * @param date - Date when the workout was/will be performed
+ * @param completed - Optional completion status (true/false/undefined)
+ */
 const ActivityItem = ({
   name,
   count,
@@ -13,6 +27,7 @@ const ActivityItem = ({
 }) => {
   return (
     <div className="border border-input-border rounded-[10px] p-4 flex items-center gap-4 mb-2">
+      {/* Completion status indicator (only shown when completed status is provided) */}
       {completed !== undefined && (
         <div
           className={`size-4 rounded-full ${
@@ -20,7 +35,9 @@ const ActivityItem = ({
           }`}
         ></div>
       )}
-      <div className="">
+
+      {/* Workout details */}
+      <div>
         <p className="font-nunito text-lg font-bold">{name}</p>
         <p className="font-nunito text-body-text text-sm">
           {count} exercises - {MONTHS_ABBREVIATED[date.getMonth()]}{' '}
