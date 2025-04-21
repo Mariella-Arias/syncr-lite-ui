@@ -1,3 +1,4 @@
+// React imports
 import {
   useState,
   useRef,
@@ -6,12 +7,20 @@ import {
   MouseEvent as ReactMouseEvent,
   ReactNode,
 } from 'react';
+
+// External Dependencies
 import { FieldInputProps } from 'formik';
 import { useSelector } from 'react-redux';
+import { Search } from 'lucide-react';
 
+// UI Components
 import Button from '../../../components/common/Button';
 import CreateExerciseForm from './CreateExerciseForm';
+
+// Redux
 import { auth } from '../../auth/authSlice';
+
+// Types
 import {
   INewExerciseData,
   INewExercise,
@@ -37,25 +46,10 @@ interface ExerciseSearchProps {
   createExercise: (data: INewExerciseData) => Promise<void>;
 }
 
-const SearchIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="size-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-      />
-    </svg>
-  );
-};
-
+/**
+ * ExerciseSearch component - A searchable dropdown for exercise selection
+ * with the ability to create new exercises
+ */
 const ExerciseSearch = ({
   field,
   options,
@@ -64,23 +58,39 @@ const ExerciseSearch = ({
   createExercise,
   ...props
 }: ExerciseSearchProps) => {
+  // Component State
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearchIcon, setIsSearchIcon] = useState(true);
   const [exerciseForm, setExerciseForm] = useState<ReactNode>(null);
+
+  // Destructure field props
   const { name, value, onChange } = field;
+
+  // Reference to the component for click-outside detection
   const fieldRef = useRef<HTMLDivElement>(null);
+
+  // Get user data from Redux store
   const { user } = useSelector(auth);
 
+  /**
+   * Filter exercises based on the current search value
+   */
   const filteredExercises = options.filter((option) =>
     option.value.includes(value.toLowerCase())
   );
 
+  /**
+   * Handle creating a new exercise
+   * @param {INewExercise} param0 - New exercise data
+   */
   const handleCreateExercise = async ({ name, parameter }: INewExercise) => {
+    // Convert exercise name to title case
     const titleCaseName = name
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
 
+    // Prepare exercise data for API
     const data = {
       value: name.toLowerCase(),
       label: titleCaseName,
@@ -88,9 +98,13 @@ const ExerciseSearch = ({
       tracking_param: parameter,
     };
 
+    // Call the create exercise function
     await createExercise(data);
   };
 
+  /**
+   * Handle clicks outside the component to close the dropdown
+   */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -101,12 +115,15 @@ const ExerciseSearch = ({
       }
     };
 
+    // Add event listener for mousedown events
     document.addEventListener('mousedown', handleClickOutside);
 
+    // Clean up event listener on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
   return (
     <div
       className={`relative transition-spacing duration-250 ease-in-out ${
@@ -114,14 +131,21 @@ const ExerciseSearch = ({
       }`}
       ref={fieldRef}
     >
+      {/* Search input and add button */}
       <div className="flex gap-2 relative z-40">
+        {/* Search icon */}
         <div
           className={`absolute inset-y-0 left-3 pointer-events-none text-gray-400 ${
             isSearchIcon ? 'flex items-center' : 'hidden'
           }`}
         >
-          <SearchIcon />
+          <Search
+            strokeWidth={1.5}
+            size={22}
+          />
         </div>
+
+        {/* Search input field */}
         <input
           {...field}
           {...props}
@@ -141,6 +165,8 @@ const ExerciseSearch = ({
             isSearchIcon ? 'pl-10' : ''
           }`}
         />
+
+        {/* Add new exercise button */}
         <Button
           size="medium"
           disabled={value.length === 0 || filteredExercises.length > 0}
@@ -161,54 +187,30 @@ const ExerciseSearch = ({
           Add
         </Button>
       </div>
+
+      {/* Dropdown menu for exercises */}
       {isDropdownOpen && (
         <div className="absolute transition-transform duration-200 ease-in-out bg-white rounded-[10px] shadow-md top-0 pt-17 left-0 right-0 -mx-3 -translate-y-3 z-30 border-1 border-input-border p-3 flex flex-col cursor-pointer max-h-67">
           <div className="flex-1 overflow-y-auto no-scrollbar">
             {filteredExercises.length ? (
+              // Show filtered exercise options
               filteredExercises.map((option) => (
                 <div
                   key={option.value}
-                  // onClick={() => {
-                  //   // Set exercise value and trigger validation on its field
-                  //   setFieldValue(name, option.label);
-                  //   setFieldTouched(name, true, true);
-
-                  //   setIsSearchIcon(false);
-                  //   setIsDropdownOpen(false);
-
-                  //   // Update Fields-array to include the newly selected exercise's tracking parameter
-                  //   const pathPieces = name.split('.');
-
-                  //   const blockIdx = parseInt(pathPieces[1]);
-                  //   const exerciseIdx = parseInt(pathPieces[3]);
-
-                  //   // Update Fields[]
-                  //   const fieldsPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.fields`;
-                  //   const newFields = ['sets', option.tracking_param];
-                  //   setFieldValue(fieldsPath, newFields);
-
-                  //   // Update Data{}
-                  //   const dataPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.data`;
-                  //   setFieldValue(`${dataPath}.${option.tracking_param}`, '');
-
-                  //   setFieldTouched(fieldsPath, true, true);
-                  //   setFieldTouched(
-                  //     `${dataPath}.${option.tracking_param}`,
-                  //     true,
-                  //     true
-                  //   );
-                  // }}
                   onClick={() => {
                     setIsSearchIcon(false);
 
-                    // Set exercise value and trigger validation on its field
+                    // Parse field path to get indices
                     const pathPieces = name.split('.');
                     const blockIdx = parseInt(pathPieces[1]);
                     const exerciseIdx = parseInt(pathPieces[3]);
+
+                    // Construct paths for form fields
                     const fieldsPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.fields`;
                     const dataPath = `blocks.${blockIdx}.exercises.${exerciseIdx}.data`;
                     const newFields = ['sets', option.tracking_param];
 
+                    // Update multiple form fields in sequence
                     setFieldValue(name, option.label, true)
                       .then(() => setFieldTouched(name, true, true))
                       .then(() => setFieldValue(fieldsPath, newFields, true))
@@ -235,6 +237,7 @@ const ExerciseSearch = ({
                 >
                   {option.label}
 
+                  {/* Delete button for user-created exercises */}
                   {option.is_editable && (
                     <button
                       type="button"
@@ -250,8 +253,10 @@ const ExerciseSearch = ({
                 </div>
               ))
             ) : exerciseForm ? (
+              // Show create exercise form when no matching exercises found and form is active
               exerciseForm
             ) : (
+              // Show "not found" message when no matching exercises found
               <div>
                 <p className="text-base italic">Exercise not found</p>
                 <p className="text-base italic">
