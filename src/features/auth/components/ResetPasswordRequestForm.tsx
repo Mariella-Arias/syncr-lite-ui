@@ -1,17 +1,30 @@
+// External Dependencies
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+// UI Components
 import Button from '../../../components/common/Button';
 
+/**
+ * Reset Password Request Form Component
+ *
+ * Provides a form for initiating password reset:
+ * - Collects user email
+ * - Implements email validation
+ * - Handles form submission for password reset request
+ */
 const ResetPasswordRequestForm = ({
   handleSubmit,
 }: {
   handleSubmit: (username: Record<string, string>) => Promise<void>;
 }) => {
+  // FORM CONFIGURATION
+  // Initial Form Values
   const initialValues = {
     email: '',
   };
 
+  // Validation Schema
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
   });
@@ -33,6 +46,7 @@ const ResetPasswordRequestForm = ({
     >
       {({ isSubmitting }) => (
         <Form className="flex flex-col w-full gap-3 mb-3">
+          {/* Email Input */}
           <div className="flex flex-col w-full">
             <Field
               type="email"
@@ -46,7 +60,13 @@ const ResetPasswordRequestForm = ({
               className="text-red-550 text-sm"
             />
           </div>
-          <Button size="medium" type="submit" disabled={isSubmitting}>
+
+          {/* Submit Button */}
+          <Button
+            size="medium"
+            type="submit"
+            disabled={isSubmitting}
+          >
             <div className="flex items-center justify-center h-full w-full">
               {isSubmitting ? (
                 <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
