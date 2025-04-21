@@ -1,26 +1,39 @@
+// React Imports
 import { useState } from 'react';
+
+// External Dependencies
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+// UI Components
 import Button from '../../../components/common/Button';
 import PasswordInputField from './PasswordInputField';
 
-export interface IChangePasswordFormData {
-  current_password: string;
-  new_password: string;
-  re_new_password: string;
-}
+// Types
+import { IChangePasswordFormData } from '../types/auth.types';
 
+/**
+ * Change Password Form Component
+ *
+ * Provides a comprehensive form for changing user password with:
+ * - Validation for current and new password
+ * - Password visibility toggle
+ * - Password strength requirements
+ * - Error handling and submission management
+ */
 const ChangePasswordForm = ({
   handleSubmit,
 }: {
   handleSubmit: (values: IChangePasswordFormData) => Promise<void>;
 }) => {
+  // FORM CONFIGURATION
+  // Password fields visibility states
   const [passwordFieldTyoe, setPasswordFieldType] = useState('password');
   const [newPasswordFieldType, setNewPasswordFieldType] = useState('password');
   const [reNewPasswordFieldType, setReNewPasswordFieldType] =
     useState('password');
 
+  // Validation Schema
   const validationSchema = Yup.object().shape({
     current_password: Yup.string().required('Password is required'),
     new_password: Yup.string()
@@ -59,6 +72,7 @@ const ChangePasswordForm = ({
       {({ isSubmitting }) => (
         <Form className="flex flex-col h-full">
           <div className="flex flex-1 flex-col gap-4">
+            {/* Current Password Field */}
             <div className="flex flex-col">
               <label className="text-lg text-body-text font-semibold">
                 Current Password
@@ -77,6 +91,7 @@ const ChangePasswordForm = ({
               />
             </div>
 
+            {/* New Password Field */}
             <div className="flex flex-col">
               <label className="text-lg text-body-text font-semibold">
                 New Password
@@ -95,6 +110,7 @@ const ChangePasswordForm = ({
               />
             </div>
 
+            {/* Confirm Password Field */}
             <div className="flex flex-col">
               <label className="text-lg text-body-text font-semibold">
                 Confirm Password
@@ -113,6 +129,7 @@ const ChangePasswordForm = ({
               />
             </div>
 
+            {/* Password Requirements */}
             <div className="text-base text-body-text bg-[#F8F8F8] px-5 py-4 rounded-[10px] font-semibold flex flex-col gap-1">
               <p className="mb-1">Password Requirements:</p>
               <p>&nbsp;•&nbsp; Minimum 8 characters</p>
@@ -121,6 +138,7 @@ const ChangePasswordForm = ({
             </div>
           </div>
 
+          {/* Submit Button */}
           <Button
             size="medium"
             type="submit"
