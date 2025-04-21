@@ -1,14 +1,25 @@
+// React Imports
 import { useState } from 'react';
+
+// External Dependencies
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+// UI Components
 import Button from '../../../components/common/Button';
 import PasswordInputField from './PasswordInputField';
 
-export interface IDeleteAccountFormData {
-  current_password: string;
-}
+// Types
+import { IDeleteAccountFormData } from '../types/auth.types';
 
+/**
+ * Delete Account Form Component
+ *
+ * Provides a form for account deletion confirmation:
+ * - Requires current password input
+ * - Supports password visibility toggle
+ * - Handles form submission and cancellation
+ */
 const DeleteAccountForm = ({
   handleSubmit,
   onCancel,
@@ -16,7 +27,11 @@ const DeleteAccountForm = ({
   handleSubmit: (data: IDeleteAccountFormData) => Promise<void>;
   onCancel: () => void;
 }) => {
+  // FORM CONFIGURATION
+  // Password Field Visibility State
   const [passwordFieldType, setPasswordFieldType] = useState('password');
+
+  // Form Validation Schema
   const validationSchema = Yup.object().shape({
     current_password: Yup.string().required('Required'),
   });
@@ -38,6 +53,7 @@ const DeleteAccountForm = ({
     >
       {({ isSubmitting }) => (
         <Form className="flex flex-col gap-3">
+          {/* Password Input Field */}
           <div className="flex flex-col w-full">
             <Field
               name="current_password"
@@ -53,7 +69,10 @@ const DeleteAccountForm = ({
               className="text-red-550 text-sm"
             />
           </div>
+
+          {/* Action Buttons */}
           <div className="flex gap-2">
+            {/* Cancel Button */}
             <Button
               onClick={() => onCancel()}
               size="medium"
@@ -62,6 +81,8 @@ const DeleteAccountForm = ({
             >
               Cancel
             </Button>
+
+            {/* Delete Button */}
             <Button
               type="submit"
               size="medium"
