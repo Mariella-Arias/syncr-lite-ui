@@ -1,25 +1,37 @@
+// React Imports
 import { useState } from 'react';
+
+// External Dependencies
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 
+// UI Components
 import Button from '../../../components/common/Button';
 import PasswordInputField from './PasswordInputField';
 
-export interface IUserCreate {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  re_password: string;
-}
+// Types
+import { IUserCreate } from '../types/auth.types';
 
+/**
+ * Signup Form Component
+ *
+ * Provides a user registration form:
+ * - Collects user profile information
+ * - Implements password validation
+ * - Supports password visibility toggle
+ * - Handles form submission and validation
+ */
 const SignupForm = ({
   handleSubmit,
 }: {
   handleSubmit: (values: IUserCreate) => Promise<void>;
 }) => {
+  // FORM CONFIGURATIION
+  // Password Field Visibility States
   const [passwordFieldType, setPasswordFieldType] = useState('password');
   const [rePasswordFieldType, setRePasswordFieldType] = useState('password');
+
+  // Validation Schema
   const SignupSchema = Yup.object().shape({
     first_name: Yup.string().required('Required'),
     last_name: Yup.string().required('Required'),
@@ -37,6 +49,7 @@ const SignupForm = ({
     re_password: Yup.string().required('Password required'),
   });
 
+  // Initial Form Values
   const userProfile: IUserCreate = {
     first_name: '',
     last_name: '',
@@ -64,6 +77,7 @@ const SignupForm = ({
       {({ isSubmitting }) => {
         return (
           <Form className="flex flex-col w-full gap-2 mb-3">
+            {/* First Name Input */}
             <div className="flex flex-col w-full">
               <Field
                 type="text"
@@ -77,6 +91,8 @@ const SignupForm = ({
                 className="text-red-550 text-sm"
               />
             </div>
+
+            {/* Last Name Input */}
             <div className="flex flex-col w-full">
               <Field
                 type="text"
@@ -90,6 +106,8 @@ const SignupForm = ({
                 className="text-red-550 text-sm"
               />
             </div>
+
+            {/* Email Input */}
             <div className="flex flex-col w-full">
               <Field
                 type="email"
@@ -103,6 +121,8 @@ const SignupForm = ({
                 className="text-red-550 text-sm"
               />
             </div>
+
+            {/* Password Input */}
             <div className="flex flex-col w-full">
               <Field
                 name="password"
@@ -118,6 +138,8 @@ const SignupForm = ({
                 className="text-red-550 text-sm"
               />
             </div>
+
+            {/* Confirm Password Input */}
             <div className="flex flex-col w-full">
               <Field
                 name="re_password"
@@ -133,7 +155,13 @@ const SignupForm = ({
                 className="text-red-550 text-sm"
               />
             </div>
-            <Button type="submit" size="medium" disabled={isSubmitting}>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              size="medium"
+              disabled={isSubmitting}
+            >
               <div className="flex items-center justify-center h-full w-full">
                 {isSubmitting ? (
                   <span className="border-t-2 border-solid  w-7 h-7 rounded-full animate-spin"></span>
