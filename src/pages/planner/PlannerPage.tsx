@@ -9,6 +9,7 @@ import Calendar from '../../features/calendar/components/Calendar';
 import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
 import { useCalendarActivity } from '../../features/calendar/hooks/useCalendarActivity';
 import { useActivityHistory } from '../../features/activity/hooks/useActivityHistory';
+
 /**
  * PlannerPage Component
  *
