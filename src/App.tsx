@@ -1,5 +1,8 @@
+// External Dependencies
 import { createBrowserRouter, RouterProvider } from 'react-router';
+import { Toaster } from 'react-hot-toast';
 
+// UI Components
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
@@ -10,8 +13,9 @@ import AppLayout from './components/layout/AppLayout';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import PlannerPage from './pages/planner/PlannerPage';
 import ActivityPage from './pages/activity/ActivityPage';
-
 import ProtectedRoute from './routes/ProtectedRoute';
+
+// Context
 import { AuthProvider } from './context/AuthProvider';
 
 function App() {
@@ -44,6 +48,32 @@ function App() {
   return (
     <AuthProvider>
       <RouterProvider router={router} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: '',
+          duration: 5000,
+          removeDelay: 1000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: 'green',
+              secondary: 'black',
+            },
+          },
+        }}
+      />
     </AuthProvider>
   );
 }
