@@ -1,5 +1,6 @@
 // External Dependencies
 import { AxiosError } from 'axios';
+import toast from 'react-hot-toast';
 
 // Services
 import { handleApiError } from '../../../services/api';
@@ -50,9 +51,24 @@ const DeleteAccountModal = () => {
         handleSubmit={async (data: IDeleteAccountFormData) => {
           try {
             await deleteAccount(data);
+
+            // Show success toast notification
+            toast.success('Account successfully deleted', {
+              duration: 5000,
+              icon: '🗑️',
+            });
           } catch (err: unknown) {
             if (err instanceof AxiosError) {
-              throw handleApiError(err);
+              const error = handleApiError(err);
+
+              // Show error toast notification
+              toast.error(error.message || 'Failed to delete account', {
+                duration: 4000,
+              });
+            } else {
+              toast.error('An unexpected error occurred', {
+                duration: 4000,
+              });
             }
           }
         }}
