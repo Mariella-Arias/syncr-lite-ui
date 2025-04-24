@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 // External Dependencies
 import { Link, Navigate } from 'react-router';
+import toast from 'react-hot-toast';
 
 // UI Components
 import LoginForm from '../../features/auth/components/LoginForm';
@@ -79,9 +80,12 @@ const LoginPage = () => {
           handleLogin={async (credentials: ILoginCredentials) => {
             try {
               await login(credentials);
-            } catch (err: unknown) {
-              console.log(err);
-              // TODO add error notification
+            } catch {
+              // Show error toast notification
+              toast.error('Invalid username or password', {
+                duration: 4000,
+                icon: '❌',
+              });
             }
           }}
         />
