@@ -1,3 +1,6 @@
+// External Dependencies
+import toast from 'react-hot-toast';
+
 // Hooks
 import { useAuthApi } from '../hooks/useAuthApi';
 
@@ -25,9 +28,17 @@ const ChangePasswordModal = () => {
     try {
       await changePassword(values);
       await logout();
-    } catch (err: any) {
-      console.log(err);
-      // TODO add error notification
+
+      // Success notification
+      toast.success('Password changed successfully.', {
+        duration: 4000,
+        icon: '🔒',
+      });
+    } catch {
+      // Error notification
+      toast.error('Failed to change password. Please try again.', {
+        duration: 4000,
+      });
     }
   };
 
