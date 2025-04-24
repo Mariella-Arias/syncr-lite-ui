@@ -51,7 +51,7 @@ const Workouts = () => {
 
   // HOOKS
   const { deleteWorkout, getWorkouts } = useWorkoutsApi();
-  const { setScheduledActivity } = useCalendarActivity();
+  const { setSchedule } = useCalendarActivity();
   const { setActivityHistory } = useActivityHistory();
 
   // COMPUTED VALUES
@@ -66,7 +66,7 @@ const Workouts = () => {
       <div className="flex flex-col mb-4">
         <p className="font-nunito text-2xl font-bold mb-6">My Workouts</p>
         <div className="flex justify-between">
-          {/* Search Input */}
+          {/* Quick Search Input */}
           <div className="relative ">
             <input
               placeholder="Search"
@@ -145,7 +145,7 @@ const Workouts = () => {
                         const response = await getWorkouts();
                         dispatch(updateWorkouts(response));
 
-                        await setScheduledActivity();
+                        await setSchedule();
                         await setActivityHistory();
                         closeCenteredModal();
                       }}
