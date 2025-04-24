@@ -1,9 +1,26 @@
-import { AxiosError } from 'axios';
-
+// Services
 import activityApi from '../api/activityApi';
 import { handleApiError } from '../../../services/api';
 
+// Types
+import { AxiosError } from 'axios';
+
+/**
+ * Activity API Hook
+ *
+ * Provides methods for managing and retrieving activity entries:
+ * - Schedule activity entries
+ * - Retrieve activity data
+ * - Delete and update activity entries
+ *
+ * Implements consistent error handling for API requests
+ */
 export const useActivityApi = () => {
+  /**
+   * Schedule a workout for a specific date
+   * @param workout Workout ID to schedule
+   * @param date_scheduled Date for scheduling the workout
+   */
   const scheduleWorkout = async ({
     workout,
     date_scheduled,
@@ -24,6 +41,9 @@ export const useActivityApi = () => {
     }
   };
 
+  /**
+   * Retrieve all user activity
+   */
   const getAllActivity = async () => {
     try {
       const response = await activityApi.getAllActivity();
@@ -34,6 +54,10 @@ export const useActivityApi = () => {
       }
     }
   };
+
+  /**
+   * Retrieve user's activity history
+   */
 
   const getActivityHistory = async () => {
     try {
@@ -46,6 +70,9 @@ export const useActivityApi = () => {
     }
   };
 
+  /**
+   * Retrieve user's most recent activities
+   */
   const getRecentActivity = async () => {
     try {
       const response = await activityApi.getRecentActivity();
@@ -57,6 +84,11 @@ export const useActivityApi = () => {
     }
   };
 
+  /**
+   * Retrieve activities within a specific date range
+   * @param start_date Beginning of the activity period
+   * @param end_date End of the activity period
+   */
   const getActivityPeriod = async ({
     start_date,
     end_date,
@@ -77,6 +109,10 @@ export const useActivityApi = () => {
     }
   };
 
+  /**
+   * Delete a specific activity by its ID
+   * @param id Activity identifier to delete
+   */
   const deleteActivity = async ({ id }: { id: number }) => {
     try {
       const response = await activityApi.deleteActivityById({
@@ -90,6 +126,11 @@ export const useActivityApi = () => {
     }
   };
 
+  /**
+   * Update an existing activity
+   * @param id Activity identifier to update
+   * @param data Updated activity information
+   */
   const updateActivity = async ({
     id,
     data,
