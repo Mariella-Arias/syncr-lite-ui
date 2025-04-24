@@ -1,5 +1,6 @@
 // External Dependencies
 import { useSelector, useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 
 // UI Components
 import CreateWorkoutForm from './CreateWorkoutForm';
@@ -42,7 +43,7 @@ const CreateWorkoutModal = () => {
     getWorkouts,
     getExercises,
   } = useWorkoutsApi();
-  const { setScheduledActivity } = useCalendarActivity();
+  const { setSchedule } = useCalendarActivity();
   const { setActivityHistory } = useActivityHistory();
 
   // MODALS CONTEXT
@@ -64,10 +65,17 @@ const CreateWorkoutModal = () => {
 
       const response = await getWorkouts();
       dispatch(updateWorkouts(response));
-      // TODO: add success notification
-    } catch (err) {
-      // TODO: add error notification
-      console.log(err);
+
+      // Success notification
+      toast.success('Workout created successfully!', {
+        duration: 4000,
+        icon: '💪',
+      });
+    } catch {
+      // Error notification
+      toast.error('Failed to create workout. Please try again.', {
+        duration: 4000,
+      });
     } finally {
       closeSlideInModal();
     }
@@ -95,7 +103,7 @@ const CreateWorkoutModal = () => {
             dispatch(updateWorkouts(workoutsRes));
 
             // Update calendar and activity history
-            await setScheduledActivity();
+            await setSchedule();
             await setActivityHistory();
           } catch (err) {
             console.log(err);
