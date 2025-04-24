@@ -1,5 +1,6 @@
 // External Dependencies
 import { Link, useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
 
 // UI Components
 import SignupForm from '../../features/auth/components/SignupForm';
@@ -32,10 +33,16 @@ const SignupPage = () => {
     try {
       // Attempt to create user account
       await createAccount(values);
-      // TODO add success notification
-    } catch (err: unknown) {
-      // TODO add error notification
-      console.log(err);
+
+      // Show success toast notification
+      toast.success('Activation link sent to your email', {
+        duration: 5000,
+        icon: '✉️',
+      });
+    } catch {
+      toast.error('Failed to create account. Please try again.', {
+        duration: 4000,
+      });
     } finally {
       // Always navigate to login page
       navigate('/login', { replace: true });
