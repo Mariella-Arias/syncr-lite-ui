@@ -46,7 +46,9 @@ const ChangePasswordForm = ({
         'Password must contain at least one special character (@$!%*?&)'
       )
       .required('Password required'),
-    re_new_password: Yup.string().required('Password required'),
+    re_new_password: Yup.string()
+      .required('Password required')
+      .oneOf([Yup.ref('new_password')], 'Passwords must match'),
   });
 
   return (
