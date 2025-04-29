@@ -46,7 +46,9 @@ const SignupForm = ({
         'Password must contain at least one special character (@$!%*?&)'
       )
       .required('Password is required'),
-    re_password: Yup.string().required('Password required'),
+    re_password: Yup.string()
+      .required('Password required')
+      .oneOf([Yup.ref('password')], 'Passwords must match'),
   });
 
   // Initial Form Values
