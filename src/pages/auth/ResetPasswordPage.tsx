@@ -1,5 +1,6 @@
 // External Dependencies
 import { Link, useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
 
 // Hooks
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
@@ -44,12 +45,22 @@ const ResetPasswordPage = () => {
               // Initiate password reset
               await initiatePasswordReset(username);
 
+              // Show success toast notification
+              toast.success('Password reset link sent to your email', {
+                duration: 5000,
+                icon: '✉️',
+              });
+
               // Navigate to login page on successful password reset
               navigate('/login', { replace: true });
-              // TODO add success notification
-            } catch (err: unknown) {
-              // TODO add error notification
-              console.log(err);
+            } catch {
+              // Show error toast notification
+              toast.error(
+                'Failed to send password reset link. Please try again.',
+                {
+                  duration: 4000,
+                }
+              );
             }
           }}
         />
