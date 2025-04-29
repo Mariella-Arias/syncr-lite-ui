@@ -1,5 +1,7 @@
-// External Dependencies
+// React Imports
 import { useState, useRef, RefObject, useEffect } from 'react';
+
+// External Dependencies
 import { useSelector } from 'react-redux';
 import { GripVertical, EllipsisVertical, X, Check } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
@@ -55,7 +57,7 @@ interface WorkoutDetailsProps extends IWorkoutDetails {
  * 1. Drag and drop capability for scheduling
  * 2. Expandable workout details
  * 3. Completion controls for marking workouts done
- * 4. Context menu for additional actions
+ * 4. Optional menu for additional actions
  */
 const WorkoutCard = ({
   id,
@@ -78,6 +80,7 @@ const WorkoutCard = ({
     over,
   } = useDraggable({
     id: id,
+    disabled: !isDraggable,
   });
 
   // LOCAL STATE
@@ -95,12 +98,10 @@ const WorkoutCard = ({
 
   // DYNAMIC STYLES FOR DRAG AND DROP
   // Must use inline styles for transform values generated at runtime by dnd-kit
-  const style = transform
-    ? {
-        transform: CSS.Translate.toString(transform), // Generates transform: translate3d(x, y, 0)
-        opacity: isDragging ? 0.7 : 1, // Visual feedback during drag
-        border: over ? '2px #41A4F2 solid' : '', // Highlight when over a drop target
-      }
+  const style = isDragging
+    ? { opacity: 0.5 }
+    : transform
+    ? { transform: CSS.Translate.toString(transform) }
     : undefined;
 
   // Close workout details when clicking outside
@@ -141,7 +142,7 @@ const WorkoutCard = ({
 
   return (
     <div
-      ref={setNodeRef}
+      ref={isDraggable ? setNodeRef : undefined}
       style={style} // Dynamic inline styles from dnd-kit (can't use Tailwind for these)
       className={`border-1 p-2  rounded-[10px] bg-white shadow-md flex flex-col min-w-60 w-full md:max-w-100 relative h-fit ${
         isCompleted !== undefined && isCompleted
