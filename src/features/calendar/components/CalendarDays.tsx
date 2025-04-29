@@ -94,9 +94,13 @@ const CalendarDay = ({
           return (
             <div
               key={idx}
-              className="bg-white rounded-[10px] shadow-md w-37 h-10 flex items-center justify-between border border-input-border"
+              className={`bg-white rounded-[10px] shadow-md h-10 max-w-[200px] flex items-center justify-between border px-2 ${
+                workoutInDay.completed === true
+                  ? 'border-2 border-green-500'
+                  : 'border-input-border'
+              }`}
             >
-              <p className="font-nunito font-bold ml-3 max-w-24 truncate">
+              <p className="font-nunito font-bold min-w-0 flex-1 truncate">
                 {workoutName}
               </p>
 
@@ -106,7 +110,7 @@ const CalendarDay = ({
                   onClick={() => {
                     onDelete(workoutInDay.id);
                   }}
-                  className="cursor-pointer rounded-[10px] p-2 hover:bg-neutral-100"
+                  className="cursor-pointer rounded-[10px] p-2 -mr-2 hover:bg-neutral-100"
                 >
                   <X size={18} />
                 </button>
