@@ -57,7 +57,7 @@ const DashboardPage = () => {
   const { workouts } = useSelector(userWorkouts);
   const { recentActivity } = useSelector(activity); // A list of the five most recent activity entries
   const { scheduledWorkouts } = useSelector(calendar);
-  const { setScheduledActivity } = useCalendarActivity();
+  const { setSchedule } = useCalendarActivity();
 
   // COMPUTED VALUES
   const scheduleToday: IActivityEntry[] = scheduledWorkouts.filter(
@@ -142,7 +142,7 @@ const DashboardPage = () => {
                       });
 
                       // Update activity scheduled on calendar
-                      await setScheduledActivity();
+                      await setSchedule();
 
                       // Update activity history in redux
                       await setActivityHistory();
@@ -156,7 +156,7 @@ const DashboardPage = () => {
                         id: scheduledActivityId,
                       });
                       // Update activity scheduled on calendar
-                      await setScheduledActivity();
+                      await setSchedule();
 
                       // Update activity history in redux
                       await setActivityHistory();
