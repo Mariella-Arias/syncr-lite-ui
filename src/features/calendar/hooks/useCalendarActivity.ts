@@ -39,7 +39,7 @@ export const useCalendarActivity = () => {
    * Fetches activity data for the entire calendar period
    * and updates the Redux store with the results
    */
-  const setScheduledActivity = async () => {
+  const setSchedule = async () => {
     const response = await getActivityPeriod({
       start_date: startDateStr,
       end_date: endDateStr,
@@ -48,5 +48,5 @@ export const useCalendarActivity = () => {
     dispatch(setScheduledWorkouts(response));
   };
 
-  return { setScheduledActivity };
+  return { setSchedule };
 };
