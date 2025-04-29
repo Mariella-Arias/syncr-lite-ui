@@ -40,7 +40,7 @@ const ScheduleWorkoutModal = ({
 
   // HOOKS
   const { scheduleWorkout } = useActivityApi();
-  const { setScheduledActivity } = useCalendarActivity();
+  const { setSchedule } = useCalendarActivity();
   const { setActivityHistory } = useActivityHistory();
 
   /**
@@ -64,7 +64,7 @@ const ScheduleWorkoutModal = ({
       });
 
       // Update relevant state
-      await setScheduledActivity();
+      await setSchedule();
       await setActivityHistory();
     } catch (err) {
       console.log(err);
