@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 // UI Components
 import Button from '../../../components/common/Button';
 import ExerciseSearch from './ExerciseSearch';
+
 // Types
 import {
   INewExerciseData,
