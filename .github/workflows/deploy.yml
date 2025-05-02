@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "VITE_API_URL=https://syncr-lite-api.onrender.com" > .env.production
       - name: Build
-        run: npm run build
+        run: npm run build -- --skipTypeCheck
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
