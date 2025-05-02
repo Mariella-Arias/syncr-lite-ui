@@ -1,5 +1,5 @@
 // External Dependencies
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createHashRouter, RouterProvider } from 'react-router';
 import { Toaster } from 'react-hot-toast';
 
 // UI Components
@@ -19,7 +19,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import { AuthProvider } from './context/AuthProvider';
 
 function App() {
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     { path: '/signup/verify', element: <VerifySignupPage /> },
     { path: '/signup', element: <SignupPage /> },
     { path: '/activate/:uid/:token', element: <ActivatePage /> },
