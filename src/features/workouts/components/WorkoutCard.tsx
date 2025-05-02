@@ -77,7 +77,6 @@ const WorkoutCard = ({
     setActivatorNodeRef,
     transform,
     isDragging,
-    over,
   } = useDraggable({
     id: id,
     disabled: !isDraggable,
