@@ -1,10 +1,5 @@
 // External Dependencies
 import { AxiosError } from 'axios';
-import { useDispatch } from 'react-redux';
-
-// Redux
-import { AppDispatch } from '../../../app/store';
-import { setUser } from '../authSlice';
 
 // Services
 import authApi from '../api/authApi';
@@ -28,8 +23,7 @@ import { IDeleteAccountFormData } from '../types/auth.types';
  */
 export const useAuthApi = () => {
   // Hooks
-  const { checkAuthStatus, setIsAuthenticated } = useAuth();
-  const dispatch: AppDispatch = useDispatch();
+  const { checkAuthStatus } = useAuth();
 
   /**
    * Login
@@ -53,15 +47,13 @@ export const useAuthApi = () => {
   /**
    * Logout
    *
-   * Logs out current user and updates auth state
+   * Logs out current user
    *
    * @throws Processed API error with user-friendly message
    */
   const logout = async () => {
     try {
       await authApi.logout();
-      dispatch(setUser(null));
-      setIsAuthenticated(false);
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);
