@@ -1,50 +1,219 @@
-# React + TypeScript + Vite
+# Syncr Lite UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based frontend for the Syncr Lite application, providing an intuitive user interface for workout management, scheduling, and activity tracking.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Setup and Installation](#setup-and-installation)
+- [Development](#development)
+- [Container Architecture](#container-architecture)
+- [Building for Production](#building-for-production)
 
-## Expanding the ESLint configuration
+## Overview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This application serves as the frontend for Syncr Lite, a comprehensive workout tracking platform. It provides a responsive and intuitive interface for users to create, manage, and track their workout routines.
 
-- Configure the top-level `parserOptions` property like this:
+## Features
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Dashboard**
+
+  - Today's scheduled workout
+  - Recent workout history
+  - Upcoming workout preview
+  - Quick actions menu
+
+- **Workout Management**
+
+  - Create custom workout templates
+  - Add/edit exercises
+  - Configure sets, reps, and duration
+  - Save templates for reuse
+
+- **Workout Planning**
+
+  - Calendar-based scheduling
+  - Drag-and-drop interface
+  - Weekly and monthly views
+  - Rescheduling functionality
+
+- **Activity Tracking**
+
+  - Workout completion tracking
+  - Historical workout data
+  - Filter by date ranges
+  - Consistency metrics
+
+- **Responsive Design**
+  - Mobile-first approach
+  - Consistent experience across devices
+  - Intuitive navigation
+
+## Technology Stack
+
+- **Framework**: React with Vite
+- **State Management**: Redux
+- **Styling**: Tailwind CSS
+- **HTTP Client**: Axios
+- **Containerization**: Docker & Docker Compose
+- **Development Server**: Vite dev server
+- **Node Version**: 20.x
+
+## Project Structure
+
+```
+syncr-lite-ui/
+│
+├── public/              # Static files
+│
+├── src/                 # Source code
+│   ├── app/             # App configuration
+│   ├── assets/          # Images, icons, and other assets
+│   │
+│   ├── components/      # Reusable UI components
+│   │   ├── common/      # Shared components
+│   │   ├── layout/      # Layout components
+│   │   └── overlays/    # Modal and overlay components
+│   │
+│   ├── context/         # React context providers
+│   │   ├── AuthContext.ts
+│   │   ├── AuthProvider.tsx
+│   │   ├── ModalsContext.tsx
+│   │   └── ModalsProvider.tsx
+│   │
+│   ├── features/        # Feature-based organization
+│   │   ├── activity/    # Activity tracking feature
+│   │   ├── auth/        # Authentication feature
+│   │   ├── calendar/    # Calendar/scheduling feature
+│   │   └── workouts/    # Workout management feature
+│   │
+│   ├── pages/           # Page components
+│   │   ├── activity/    # Activity tracking pages
+│   │   ├── auth/        # Authentication pages
+│   │   ├── dashboard/   # Dashboard page
+│   │   └── planner/     # Calendar/planning pages
+│   │
+│   ├── routes/          # Application routing
+│   ├── services/        # API service calls
+│   │
+│   ├── App.tsx          # Main app component
+│   ├── main.tsx         # Entry point
+│   ├── styles.css       # Global styles
+│   └── vite-env.d.ts    # Vite environment types
+│
+├── .dockerignore        # Docker ignore file
+├── .env                 # Environment variables
+├── .gitignore           # Git ignore file
+├── docker-compose.yml   # Docker Compose configuration
+├── Dockerfile           # Docker configuration
+├── eslint.config.js     # ESLint configuration
+├── index.html           # HTML entry point
+├── package.json         # npm dependencies
+├── tsconfig.json        # TypeScript configuration
+└── vite.config.ts       # Vite configuration
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+> **Note:** Each feature module (activity, auth, calendar, workouts) follows a consistent internal structure with:
+>
+> - `api/`: Feature-specific API services
+> - `components/`: Feature-specific UI components
+> - `hooks/`: Custom React hooks
+> - `types/`: TypeScript type definitions
+> - `slice.ts`: Redux slice for state management
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Setup and Installation
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Prerequisites
+
+- Docker and Docker Compose
+- Node.js 20+ (for local development without Docker)
+- Git
+
+### Using Docker (Recommended)
+
+1. Clone the repository:
+
+   ```bash
+   git clone <repository-url>
+   cd syncr-lite-ui
+   ```
+
+2. Build and start the container:
+
+   ```bash
+   docker compose up --build
+   ```
+
+3. Access the application at `http://localhost:5173`
+
+### Local Development (Alternative)
+
+1. Clone the repository:
+
+   ```bash
+   git clone <repository-url>
+   cd syncr-lite-ui
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file with the following content:
+
+   ```
+   VITE_API_URL=http://localhost:8000
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Access the application at `http://localhost:5173`
+
+## Development
+
+### Daily Development Workflow
+
+```bash
+# Start the container
+docker compose up
+
+# Stop the container
+docker compose down
 ```
+
+### Environment Variables
+
+The application uses the following environment variables:
+
+| Variable     | Description     | Default               |
+| ------------ | --------------- | --------------------- |
+| VITE_API_URL | Backend API URL | http://localhost:8000 |
+
+## Container Architecture
+
+The frontend application is containerized with the following configuration:
+
+- **Base Image**: Node 20 Alpine (lightweight)
+- **Port Mapping**: 5173:5173 (Vite dev server)
+- **Volume Mapping**:
+  - `.:/app`: Maps local code to container for live updates
+  - `/app/node_modules`: Preserves container's node_modules
+
+This setup enables:
+
+- Hot-reloading for immediate feedback during development
+- Consistent development environment across team members
+- Isolation from local Node.js version requirements
+
+## Connecting to the Backend
+
+This UI is designed to work with the [Syncr Lite API](https://github.com/Mariella-Arias/syncr-lite-api). Make sure the backend is running and accessible at the URL specified in the `VITE_API_URL` environment variable.
