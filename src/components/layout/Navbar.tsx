@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, RefObject } from 'react';
 import { User, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // UI Components
 import DeleteAccountModal from '../../features/auth/components/DeleteAccountModal';
@@ -14,7 +15,9 @@ import ChangePasswordModal from '../../features/auth/components/ChangePasswordMo
 import logo from '../../assets/logo.png';
 
 // Redux
+import { AppDispatch } from '../../app/store';
 import { auth } from '../../features/auth/authSlice';
+import { setUser } from '../../features/auth/authSlice';
 
 // Context
 import {
@@ -24,6 +27,7 @@ import {
 
 // Hooks
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * UserSettings Props Interface
@@ -196,6 +200,8 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
   const { logout } = useAuthApi();
   const { open: openSlideInModal } = useSlideInModalContext();
   const { open: openCenteredModal } = useCenteredModalContext();
+  const dispatch: AppDispatch = useDispatch();
+  const { setIsAuthenticated } = useAuth();
 
   return (
     <div
@@ -206,6 +212,12 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
       <div
         onClick={async () => {
           await logout();
+
+          // Update user in redux
+          dispatch(setUser(null));
+
+          // Update auth context
+          setIsAuthenticated(false);
         }}
         className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
       >

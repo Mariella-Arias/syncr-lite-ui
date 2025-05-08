@@ -55,18 +55,22 @@ const authSlice = createSlice({
      * @returns Updated authentication state with user information
      */
     setUser: (state, action) => {
-      const {
-        id,
-        first_name: firstName,
-        last_name: lastName,
-        email,
-      } = action.payload;
-      state.user = {
-        id,
-        firstName,
-        lastName,
-        email,
-      };
+      if (!action.payload) {
+        state.user = null;
+      } else {
+        const {
+          id,
+          first_name: firstName,
+          last_name: lastName,
+          email,
+        } = action.payload;
+        state.user = {
+          id,
+          firstName,
+          lastName,
+          email,
+        };
+      }
       return state;
     },
   },
