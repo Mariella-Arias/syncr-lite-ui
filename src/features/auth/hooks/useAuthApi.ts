@@ -36,7 +36,6 @@ export const useAuthApi = () => {
   const login = async (credentials: ILoginCredentials) => {
     try {
       await authApi.login(credentials);
-      await checkAuthStatus();
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         throw handleApiError(err);

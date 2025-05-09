@@ -1,37 +1,24 @@
-// React Imports
-import { useEffect, useState } from 'react';
-
 // External Dependencies
 import { Link, Navigate } from 'react-router';
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 
 // UI Components
 import LoginForm from '../../features/auth/components/LoginForm';
 
+// Redux
+import { AppDispatch } from '../../app/store';
+import { setUser, selectIsAuthenticated } from '../../features/auth/authSlice';
+
 // Hooks
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
-
-// Context
-import { useAuth } from '../../context/AuthContext';
 
 // Assets
 import logo from '../../assets/logo.png';
 
 // Types
 import { ILoginCredentials } from '../../features/auth/types/auth.types';
-
-/**
- * Loader Component
- *
- * Displays a centered spinning loader during authentication checks
- */
-const Loader = () => {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="border-t-4 border-sky-450 border-solid w-16 h-16 rounded-full animate-spin"></div>
-    </div>
-  );
-};
+import authApi from '../../features/auth/api/authApi';
 
 /**
  * Login Page Component
@@ -42,26 +29,10 @@ const Loader = () => {
  * - Redirects to home page if already authenticated
  */
 const LoginPage = () => {
-  // LOCAL STATE
-  const [isLoading, setIsLoading] = useState(true);
-
   // HOOKS
   const { login } = useAuthApi();
-  const { isAuthenticated, checkAuthStatus } = useAuth();
-
-  // Authentication Status Check
-  useEffect(() => {
-    const checkAuth = async () => {
-      await checkAuthStatus();
-      setIsLoading(false);
-    };
-    checkAuth();
-  }, [checkAuthStatus]);
-
-  // Loading State
-  if (isLoading) {
-    return <Loader />;
-  }
+  const dispatch: AppDispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   // Authentication Redirect
   if (isAuthenticated) {
@@ -79,13 +50,21 @@ const LoginPage = () => {
         <LoginForm
           handleLogin={async (credentials: ILoginCredentials) => {
             try {
+              // Attemp logging in user
               await login(credentials);
+
+              // Update user info in redux
+              const res = await authApi.getUser();
+              dispatch(setUser(res));
             } catch {
               // Show error toast notification
               toast.error('Invalid username or password', {
                 duration: 4000,
                 icon: '❌',
               });
+
+              // Update user authenticated status
+              dispatch(setUser(null));
             }
           }}
         />
