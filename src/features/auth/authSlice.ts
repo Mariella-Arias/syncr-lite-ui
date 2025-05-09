@@ -86,6 +86,9 @@ const authSlice = createSlice({
  */
 export const auth = (state: RootState) => state.auth;
 
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.user !== null;
+
 // Export actions for use in components
 export const { setUser } = authSlice.actions;
 

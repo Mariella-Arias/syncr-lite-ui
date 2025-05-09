@@ -27,7 +27,6 @@ import {
 
 // Hooks
 import { useAuthApi } from '../../features/auth/hooks/useAuthApi';
-import { useAuth } from '../../context/AuthContext';
 
 /**
  * UserSettings Props Interface
@@ -201,7 +200,6 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
   const { open: openSlideInModal } = useSlideInModalContext();
   const { open: openCenteredModal } = useCenteredModalContext();
   const dispatch: AppDispatch = useDispatch();
-  const { setIsAuthenticated } = useAuth();
 
   return (
     <div
@@ -215,9 +213,6 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
 
           // Update user in redux
           dispatch(setUser(null));
-
-          // Update auth context
-          setIsAuthenticated(false);
         }}
         className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
       >
