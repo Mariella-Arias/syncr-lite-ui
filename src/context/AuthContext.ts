@@ -3,7 +3,6 @@ import { useContext, createContext } from 'react';
 interface IAuthContext {
   isAuthenticated: boolean;
   checkAuthStatus: () => Promise<void>;
-  setIsAuthenticated: (value: boolean) => void;
 }
 
 export const AuthContext = createContext<IAuthContext | undefined>(undefined);

@@ -19,6 +19,37 @@ const instance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Response interceptor for token refresh
+instance.interceptors.response.use(
+  (response) => {
+    // console.log('Response returned from interceptor');
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    // console.log('API ERROR');
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.url !== 'token/refresh/'
+    ) {
+      originalRequest._retry = true; // Mark the request to avoid infinite loops
+
+      try {
+        await instance.post('token/refresh/');
+
+        return instance(originalRequest);
+      } catch (refreshError) {
+        // console.log('Token refresh failed', refreshError);
+
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 const api = {
   post: async <T>(url: string, data = {}, config = {}): Promise<any> => {
     const response = await instance.post<ApiResponse<T>>(url, data, config);
