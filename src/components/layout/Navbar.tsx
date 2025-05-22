@@ -81,32 +81,18 @@ const Navbar = () => {
 
   return (
     <div className="w-full p-2 flex flex-wrap md:flex-nowrap items-center justify-between ">
-      {/* Logo and Mobile User Menu Container */}
-      <div className="flex w-full items-center justify-between md:w-fit">
+      {/* Logo Container */}
+      <Link
+        to="/"
+        className="flex items-center"
+      >
         {/* Application Logo */}
         <img
           src={logo}
-          className="w-40 h-10 md:w-48 md:h-12 transition duration-300 ease-in-out"
+          className="w-40 h-10 md:w-48 md:h-12 transition duration-300 ease-in-out object-contain"
           alt="Logo"
         />
-
-        {/* Mobile User Settings Dropdown (hidden on desktop) */}
-        <div
-          onClick={() => setIsOpen((prev) => !prev)}
-          className={`bg-[#F3F2F2] p-3 md:hidden flex items-center gap-2 cursor-pointer relative ${
-            isOpen ? 'shadow-md' : ''
-          }`}
-        >
-          <p>{user?.email}</p>
-          <ChevronDown
-            className="text-[#9CA3AF]"
-            strokeWidth={1.5}
-            size={20}
-          />
-          {/* Render dropdown when open */}
-          {isOpen && <UserSettings menuRef={menuRef} />}
-        </div>
-      </div>
+      </Link>
 
       {/* Navigation Links */}
       <div className="order-last flex-grow w-full md:order-none md:w-auto md:flex-grow-0">
@@ -143,40 +129,41 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Desktop User Settings Dropdown (hidden on mobile) */}
-      <div
-        onClick={() => {
-          setIsOpen((prev) => !prev);
-        }}
-        className={`hidden bg-[#F3F2F2] p-3 md:flex items-center gap-3 md:w-fit cursor-pointer relative ${
-          isOpen ? 'shadow-md' : ''
-        }`}
-      >
-        {/* User Icon */}
-        <User
-          strokeWidth={1.5}
-          className="text-[#9CA3AF]"
-        />
-
-        {/* User Email */}
-        <p>{user?.email}</p>
-
-        {/* Toggle Chevron Icons */}
-        {!isOpen && (
-          <ChevronDown
-            className="text-[#9CA3AF]"
+      {/* User Settings Dropdown */}
+      <div className="relative">
+        <div
+          onClick={() => {
+            setIsOpen((prev) => !prev);
+          }}
+          className={`bg-[#F3F2F2] p-3 flex items-center gap-2 md:gap-3 cursor-pointer ${
+            isOpen ? 'shadow-md' : ''
+          }`}
+        >
+          {/* User Icon */}
+          <User
             strokeWidth={1.5}
-            size={20}
+            className="text-[#9CA3AF] hidden md:block"
           />
-        )}
-        {isOpen && (
-          <ChevronUp
-            className="text-[#9CA3AF]"
-            strokeWidth={1.5}
-            size={20}
-          />
-        )}
 
+          {/* User Email */}
+          <p>{user?.email}</p>
+
+          {/* Toggle Chevron Icons */}
+          {!isOpen && (
+            <ChevronDown
+              className="text-[#9CA3AF]"
+              strokeWidth={1.5}
+              size={20}
+            />
+          )}
+          {isOpen && (
+            <ChevronUp
+              className="text-[#9CA3AF]"
+              strokeWidth={1.5}
+              size={20}
+            />
+          )}
+        </div>
         {/* Render dropdown when open */}
         {isOpen && <UserSettings menuRef={menuRef} />}
       </div>
@@ -214,7 +201,7 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
           // Update user in redux
           dispatch(setUser(null));
         }}
-        className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
+        className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg cursor-pointer"
       >
         Log Out
       </div>
@@ -224,7 +211,7 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
         onClick={() => {
           openSlideInModal(<ChangePasswordModal />);
         }}
-        className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
+        className="text-body-text hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg cursor-pointer"
       >
         Change Password
       </div>
@@ -234,7 +221,7 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
         onClick={() => {
           openCenteredModal(<DeleteAccountModal />);
         }}
-        className="text-red-550 hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg"
+        className="text-red-550 hover:bg-[#F3F2F2] rounded-[10px] p-2 text-lg cursor-pointer"
       >
         Delete Account
       </div>
