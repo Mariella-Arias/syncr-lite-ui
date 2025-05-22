@@ -1,7 +1,7 @@
 import { useContext, createContext } from 'react';
 
 interface IAuthContext {
-  isAuthenticated: boolean;
+  isLoading: boolean;
   checkAuthStatus: () => Promise<void>;
 }
 

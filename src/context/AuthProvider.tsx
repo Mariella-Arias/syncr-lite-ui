@@ -1,29 +1,36 @@
 // React Imports
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 
 // External Dependencies
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // Context
 import { AuthContext } from './AuthContext';
 
 // Redux
 import { AppDispatch } from '../app/store';
-import { setUser, selectIsAuthenticated } from '../features/auth/authSlice';
+import { setUser } from '../features/auth/authSlice';
 
 // Hooks
 import authApi from '../features/auth/api/authApi';
 
 /**
- * AuthProvider component
+ * AuthProvider Component
  *
- * Provides authentication state and methods to the entire application
- * through React Context. Manages authentication state and token refresh logic.
+ * Provides authentication state and methods to the entire application through React Context.
+ * Handles initial authentication verification on app load and manages loading states.
+ *
+ * Key responsibilities:
+ * - Verifies user authentication status when the app starts
+ * - Manages loading state during authentication checks
+ * - Updates Redux store with user data or clears it on authentication failure
+ * - Provides authentication methods to child components via context
+ *
+ * @param children - React components that will have access to authentication context
  */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch: AppDispatch = useDispatch();
-
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const [isLoading, setIsLoading] = useState(true);
 
   /**
    * Check the user's authentication status
@@ -37,11 +44,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       dispatch(setUser(response));
     } catch (err: unknown) {
       dispatch(setUser(null));
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Verify authentication status when the provider mounts
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, checkAuthStatus }}>
+    <AuthContext.Provider value={{ isLoading, checkAuthStatus }}>
       {children}
     </AuthContext.Provider>
   );
