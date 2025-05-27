@@ -14,6 +14,19 @@ import {
 } from '../types/workouts.types';
 
 /**
+ * Converts a string to title case
+ * @param {string} str - String to convert
+ * @returns {string} Title cased string
+ */
+const toTitleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+/**
  * CreateWorkoutForm - Form component for creating and editing workouts
  *
  * @param {Object} props Component props
@@ -124,6 +137,7 @@ const CreateWorkoutForm = ({
           // Transform exercise references from labels to IDs for API submission
           const transformedValues = {
             ...values,
+            name: toTitleCase(values.name.trim()),
             blocks: values.blocks.map((block) => ({
               ...block,
               exercises: block.exercises.map((exercise) => ({
@@ -134,6 +148,7 @@ const CreateWorkoutForm = ({
               })),
             })),
           };
+
           await handleSubmit(transformedValues);
         } finally {
           setSubmitting(false);
@@ -165,206 +180,210 @@ const CreateWorkoutForm = ({
               </div>
 
               {/* Blocks Array - Manages workout blocks */}
-              <FieldArray name="blocks">
-                {({ push: pushBlock, remove: removeBlock }) => {
-                  return (
-                    <div className="flex flex-col gap-1">
-                      <label className="text-lg text-body-text font-semibold">
-                        Exercise Blocks
-                      </label>
+              <div className="flex flex-col w-full gap-1 mb-4">
+                <FieldArray name="blocks">
+                  {({ push: pushBlock, remove: removeBlock }) => {
+                    return (
+                      <div className="flex flex-col gap-1">
+                        <label className="text-lg text-body-text font-semibold">
+                          Exercise Blocks
+                        </label>
 
-                      {/* Map through all blocks */}
-                      {values.blocks.map((block, blockIdx) => {
-                        return (
-                          <div key={blockIdx}>
-                            {/* Exercises Array - Manages exercises within each block */}
-                            <FieldArray name={`blocks.${blockIdx}.exercises`}>
-                              {({
-                                push: pushExercise,
-                                remove: removeExercise,
-                              }) => {
-                                return (
-                                  <div className="border-1 border-input-border rounded-[10px] px-5 pb-5 flex flex-col gap-2 mb-4 shadow-md">
-                                    {/* Block Header with Remove Block Button */}
-                                    <div className="flex items-center justify-between mt-4">
-                                      <p className="text-lg text-body-text font-semibold">
-                                        Block {blockIdx + 1}
-                                      </p>
-                                      <button
-                                        type="button"
-                                        onClick={() => removeBlock(blockIdx)}
-                                        className="h-10 w-10  text-body-text text-2xl p-2 flex items-center justify-center rounded-full hover:bg-neutral-100"
-                                      >
-                                        &times;
-                                      </button>
-                                    </div>
+                        {/* Map through all blocks */}
+                        {values.blocks.map((block, blockIdx) => {
+                          return (
+                            <div key={blockIdx}>
+                              {/* Exercises Array - Manages exercises within each block */}
+                              <FieldArray name={`blocks.${blockIdx}.exercises`}>
+                                {({
+                                  push: pushExercise,
+                                  remove: removeExercise,
+                                }) => {
+                                  return (
+                                    <div className="border-1 border-input-border rounded-[10px] px-5 pb-5 flex flex-col gap-2 mb-4 shadow-md">
+                                      {/* Block Header with Remove Block Button */}
+                                      <div className="flex items-center justify-between mt-4">
+                                        <p className="text-lg text-body-text font-semibold">
+                                          Block {blockIdx + 1}
+                                        </p>
+                                        <button
+                                          type="button"
+                                          onClick={() => removeBlock(blockIdx)}
+                                          className="h-10 w-10  text-body-text text-2xl p-2 flex items-center justify-center rounded-full hover:bg-neutral-100"
+                                        >
+                                          &times;
+                                        </button>
+                                      </div>
 
-                                    {/* Map through all exercises in the current block */}
-                                    {block.exercises.map(
-                                      (exercise, exerciseIdx) => {
-                                        // Find the selected exercise from options
-                                        const selectedExercise =
-                                          typeof exercise.exercise ===
-                                            'string' &&
-                                          exercise.exercise.length > 0
-                                            ? options.find((option) => {
-                                                if (
-                                                  option.label ===
-                                                  exercise.exercise
-                                                ) {
-                                                  return option.tracking_param;
-                                                }
-                                              })
-                                            : null;
+                                      {/* Map through all exercises in the current block */}
+                                      {block.exercises.map(
+                                        (exercise, exerciseIdx) => {
+                                          // Find the selected exercise from options
+                                          const selectedExercise =
+                                            typeof exercise.exercise ===
+                                              'string' &&
+                                            exercise.exercise.length > 0
+                                              ? options.find((option) => {
+                                                  if (
+                                                    option.label ===
+                                                    exercise.exercise
+                                                  ) {
+                                                    return option.tracking_param;
+                                                  }
+                                                })
+                                              : null;
 
-                                        // Generate a label for the exercise (e.g., "1A", "1B")
-                                        const blockExerciseLabel =
-                                          blockIdx +
-                                          1 +
-                                          String.fromCharCode(exerciseIdx + 65);
+                                          // Generate a label for the exercise (e.g., "1A", "1B")
+                                          const blockExerciseLabel =
+                                            blockIdx +
+                                            1 +
+                                            String.fromCharCode(
+                                              exerciseIdx + 65
+                                            );
 
-                                        return (
-                                          <div
-                                            key={blockExerciseLabel}
-                                            className="flex flex-col gap-3"
-                                          >
-                                            <div className="flex flex-col gap-1">
-                                              <label className="text-lg text-body-text font-semibold">
-                                                {blockExerciseLabel}
-                                              </label>
+                                          return (
+                                            <div
+                                              key={blockExerciseLabel}
+                                              className="flex flex-col gap-3"
+                                            >
+                                              <div className="flex flex-col gap-1">
+                                                <label className="text-lg text-body-text font-semibold">
+                                                  {blockExerciseLabel}
+                                                </label>
 
-                                              {/* Exercise Selection Field */}
-                                              <div className="flex items-start">
-                                                <div className="w-full relative rounded-[10px]">
-                                                  <Field
-                                                    name={`blocks.${blockIdx}.exercises.${exerciseIdx}.exercise`}
-                                                    component={ExerciseSearch}
-                                                    options={options}
-                                                    placeholder="Add Exercise"
-                                                    onDeleteExercise={
-                                                      deleteExercise
-                                                    }
-                                                    createExercise={
-                                                      createExercise
-                                                    }
-                                                  />
-                                                  <ErrorMessage
-                                                    name={`blocks.${blockIdx}.exercises.${exerciseIdx}.exercise`}
-                                                    component="div"
-                                                    className="text-red-550 text-sm"
-                                                  />
+                                                {/* Exercise Selection Field */}
+                                                <div className="flex items-start">
+                                                  <div className="w-full relative rounded-[10px]">
+                                                    <Field
+                                                      name={`blocks.${blockIdx}.exercises.${exerciseIdx}.exercise`}
+                                                      component={ExerciseSearch}
+                                                      options={options}
+                                                      placeholder="Add Exercise"
+                                                      onDeleteExercise={
+                                                        deleteExercise
+                                                      }
+                                                      createExercise={
+                                                        createExercise
+                                                      }
+                                                    />
+                                                    <ErrorMessage
+                                                      name={`blocks.${blockIdx}.exercises.${exerciseIdx}.exercise`}
+                                                      component="div"
+                                                      className="text-red-550 text-sm"
+                                                    />
+                                                  </div>
+                                                  {/* Remove Exercise Button (not shown for first exercise) */}
+                                                  {exerciseIdx > 0 && (
+                                                    <button
+                                                      type="button"
+                                                      onClick={() =>
+                                                        removeExercise(
+                                                          exerciseIdx
+                                                        )
+                                                      }
+                                                      className="h-10 w-10  text-body-text text-2xl p-2 flex items-center justify-center rounded-full hover:bg-neutral-100"
+                                                    >
+                                                      &times;
+                                                    </button>
+                                                  )}
                                                 </div>
-                                                {/* Remove Exercise Button (not shown for first exercise) */}
-                                                {exerciseIdx > 0 && (
-                                                  <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                      removeExercise(
-                                                        exerciseIdx
-                                                      )
+                                              </div>
+
+                                              {/* Exercise Fields (sets, reps, duration, etc.) */}
+                                              <div className="flex gap-5">
+                                                {selectedExercise &&
+                                                  values.blocks[
+                                                    blockIdx
+                                                  ].exercises[
+                                                    exerciseIdx
+                                                  ].fields.map(
+                                                    (field: string) => {
+                                                      return (
+                                                        <div
+                                                          key={field}
+                                                          className="flex flex-col gap-1"
+                                                        >
+                                                          {/* Field Label (capitalized) */}
+                                                          <label className="text-lg text-body-text font-semibold">
+                                                            {field
+                                                              .slice(0, 1)
+                                                              .toUpperCase() +
+                                                              field
+                                                                .slice(1)
+                                                                .toLowerCase()}
+                                                          </label>
+                                                          {/* Field Input */}
+                                                          <Field
+                                                            name={`blocks.${blockIdx}.exercises.${exerciseIdx}.data.${field}`}
+                                                            type="number"
+                                                            placeholder="0"
+                                                            className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
+                                                          />
+                                                          {/* Field Error Message */}
+                                                          <ErrorMessage
+                                                            name={`blocks.${blockIdx}.exercises.${exerciseIdx}.data.${field}`}
+                                                            component="div"
+                                                            className="text-red-550 text-sm"
+                                                          />
+                                                        </div>
+                                                      );
                                                     }
-                                                    className="h-10 w-10  text-body-text text-2xl p-2 flex items-center justify-center rounded-full hover:bg-neutral-100"
-                                                  >
-                                                    &times;
-                                                  </button>
-                                                )}
+                                                  )}
                                               </div>
                                             </div>
+                                          );
+                                        }
+                                      )}
 
-                                            {/* Exercise Fields (sets, reps, duration, etc.) */}
-                                            <div className="flex gap-5">
-                                              {selectedExercise &&
-                                                values.blocks[
-                                                  blockIdx
-                                                ].exercises[
-                                                  exerciseIdx
-                                                ].fields.map(
-                                                  (field: string) => {
-                                                    return (
-                                                      <div
-                                                        key={field}
-                                                        className="flex flex-col gap-1"
-                                                      >
-                                                        {/* Field Label (capitalized) */}
-                                                        <label className="text-lg text-body-text font-semibold">
-                                                          {field
-                                                            .slice(0, 1)
-                                                            .toUpperCase() +
-                                                            field
-                                                              .slice(1)
-                                                              .toLowerCase()}
-                                                        </label>
-                                                        {/* Field Input */}
-                                                        <Field
-                                                          name={`blocks.${blockIdx}.exercises.${exerciseIdx}.data.${field}`}
-                                                          type="number"
-                                                          placeholder="0"
-                                                          className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
-                                                        />
-                                                        {/* Field Error Message */}
-                                                        <ErrorMessage
-                                                          name={`blocks.${blockIdx}.exercises.${exerciseIdx}.data.${field}`}
-                                                          component="div"
-                                                          className="text-red-550 text-sm"
-                                                        />
-                                                      </div>
-                                                    );
-                                                  }
-                                                )}
-                                            </div>
-                                          </div>
-                                        );
-                                      }
-                                    )}
+                                      {/* Add Exercise button */}
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          pushExercise({
+                                            exercise: '',
+                                            fields: ['sets'],
+                                            data: {
+                                              sets: 1,
+                                              reps: '',
+                                              duration: '',
+                                            },
+                                          })
+                                        }
+                                        className="bg-input-border p-2 mt-2 text-lg text-body-text font-semibold rounded-[10px] shadow-md"
+                                      >
+                                        + Add Exercise
+                                      </button>
+                                    </div>
+                                  );
+                                }}
+                              </FieldArray>
+                            </div>
+                          );
+                        })}
 
-                                    {/* Add Exercise button */}
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        pushExercise({
-                                          exercise: '',
-                                          fields: ['sets'],
-                                          data: {
-                                            sets: 1,
-                                            reps: '',
-                                            duration: '',
-                                          },
-                                        })
-                                      }
-                                      className="bg-input-border p-2 mt-2 text-lg text-body-text font-semibold rounded-[10px] shadow-md"
-                                    >
-                                      + Add Exercise
-                                    </button>
-                                  </div>
-                                );
-                              }}
-                            </FieldArray>
-                          </div>
-                        );
-                      })}
-
-                      {/* Add Block button */}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          pushBlock({
-                            exercises: [
-                              {
-                                exercise: '',
-                                fields: ['sets'],
-                                data: { sets: 1, reps: '', duration: '' },
-                              },
-                            ],
-                          })
-                        }
-                        className="border-2 border-dashed bg-[#F2F5F9] border-input-border p-2 text-lg text-body-text font-semibold rounded-[10px] w-full mb-4 shadow-sm"
-                      >
-                        + Add Block
-                      </button>
-                    </div>
-                  );
-                }}
-              </FieldArray>
+                        {/* Add Block button */}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            pushBlock({
+                              exercises: [
+                                {
+                                  exercise: '',
+                                  fields: ['sets'],
+                                  data: { sets: 1, reps: '', duration: '' },
+                                },
+                              ],
+                            })
+                          }
+                          className="border-2 border-dashed bg-[#F2F5F9] border-input-border p-2 text-lg text-body-text font-semibold rounded-[10px] w-full shadow-sm"
+                        >
+                          + Add Block
+                        </button>
+                      </div>
+                    );
+                  }}
+                </FieldArray>
+              </div>
             </div>
 
             {/* Form Submit Button with Loading State */}
