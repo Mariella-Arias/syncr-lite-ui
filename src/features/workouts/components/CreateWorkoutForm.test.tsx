@@ -76,8 +76,6 @@ vi.mock('./ExerciseSearch', () => ({
           true,
           true
         );
-
-        console.log('Form fields updated successfully');
       } catch (error) {
         console.error('Error updating form fields:', error);
       }
@@ -85,7 +83,6 @@ vi.mock('./ExerciseSearch', () => ({
 
     return (
       <div className="relative">
-        {/* Input field that mimics the real component */}
         <input
           {...field}
           {...props}
@@ -95,12 +92,10 @@ vi.mock('./ExerciseSearch', () => ({
           onChange={onChange}
           placeholder={placeholder || 'Add Exercise'}
           autoComplete="off"
-          //   className="border-input-border border-1 rounded-[10px] py-2 px-3 text-lg w-full"
         />
 
         {
           <div className="absolute w-full z-10">
-            {/* <div className="absolute bg-white border border-gray-300 rounded mt-1 w-full z-10"> */}
             {options?.map((option) => (
               <div
                 key={option.id}
