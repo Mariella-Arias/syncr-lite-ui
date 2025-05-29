@@ -10,18 +10,25 @@ import {
   cleanup,
   waitFor,
 } from '@testing-library/react';
-import { expect, test, vi, describe, afterEach } from 'vitest';
+import { expect, test, vi, describe, beforeEach } from 'vitest';
 
 // Components
 import LoginForm from './LoginForm.tsx';
 
 describe('Login Form', () => {
-  afterEach(() => {
+  let mockHandleLogin: any;
+
+  beforeEach(() => {
+    mockHandleLogin = vi.fn();
     cleanup();
   });
 
+  const renderForm = (handleLogin = mockHandleLogin) => {
+    return render(<LoginForm handleLogin={handleLogin} />);
+  };
+
   test('renders form fields correctly', () => {
-    render(<LoginForm handleLogin={vi.fn()} />);
+    renderForm();
 
     expect(screen.getByPlaceholderText('Email')).toBeTruthy();
     expect(screen.getByPlaceholderText('Password')).toBeTruthy();
@@ -29,7 +36,7 @@ describe('Login Form', () => {
   });
 
   test('shows validation errors for empty fields', async () => {
-    render(<LoginForm handleLogin={vi.fn()} />);
+    renderForm();
     fireEvent.click(screen.getByText('Log In'));
 
     expect(await screen.findByText('Required')).toBeTruthy();
@@ -37,8 +44,7 @@ describe('Login Form', () => {
   });
 
   test('calls handleLogin with form data on valid submission', async () => {
-    const mockHandleLogin = vi.fn();
-    render(<LoginForm handleLogin={mockHandleLogin} />);
+    renderForm();
 
     // Fill valid form data
     fireEvent.change(screen.getByPlaceholderText('Email'), {
