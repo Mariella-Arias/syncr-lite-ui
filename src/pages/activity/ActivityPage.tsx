@@ -8,7 +8,7 @@ import ActivityLog from '../../features/activity/components/ActivityLog';
 // Redux
 import { activity } from '../../features/activity/activitySlice';
 
-// API Hooks
+// Hooks
 import { useActivityApi } from '../../features/activity/hooks/useActivityApi';
 
 // Utils
@@ -43,7 +43,7 @@ const ActivityPage = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // API HOOKS
+  // HOOKS
   const { getActivityPeriod } = useActivityApi();
 
   // REDUX
