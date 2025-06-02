@@ -304,7 +304,10 @@ const CreateWorkoutForm = ({
                                                           className="flex flex-col gap-1"
                                                         >
                                                           {/* Field Label (capitalized) */}
-                                                          <label className="text-lg text-body-text font-semibold">
+                                                          <label
+                                                            className="text-lg text-body-text font-semibold"
+                                                            htmlFor={`blocks.${blockIdx}.exercises.${exerciseIdx}.data.${field}`}
+                                                          >
                                                             {field
                                                               .slice(0, 1)
                                                               .toUpperCase() +
