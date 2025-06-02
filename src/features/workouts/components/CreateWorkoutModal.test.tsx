@@ -9,7 +9,17 @@ import CreateWorkoutModal from './CreateWorkoutModal';
 import workoutsReducer from '../workoutsSlice';
 
 vi.mock('./CreateWorkoutForm', () => ({
-  default: ({ handleSubmit, deleteExercise, createExercise, options }) => (
+  default: ({
+    handleSubmit,
+    deleteExercise,
+    createExercise,
+    options,
+  }: {
+    handleSubmit: (data: any) => Promise<void>;
+    deleteExercise: ({ id }: { id: number }) => Promise<any>;
+    createExercise: (data: any) => Promise<void>;
+    options: [];
+  }) => (
     <div data-testid="create-workout-form">
       <div data-testid="form-props">
         {JSON.stringify({
