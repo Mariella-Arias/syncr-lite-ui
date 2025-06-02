@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+// External Dependencies
 import { describe, test, vi, expect, beforeEach } from 'vitest';
 import {
   render,
@@ -10,10 +11,17 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { FieldInputProps } from 'formik';
+
+// UI Components
 import CreateWorkoutForm from './CreateWorkoutForm';
+
+// Redux
 import authReducer from '../../auth/authSlice';
 
-import { configureStore } from '@reduxjs/toolkit';
+// Types
+import { IExercise } from '../types/workouts.types';
 
 const createMockStore = () => {
   return configureStore({
@@ -39,17 +47,31 @@ vi.mock('./ExerciseSearch', () => ({
     field,
     form,
     options,
-    placeholder,
     onDeleteExercise = vi.fn(),
     createExercise = vi.fn(),
     ...props
+  }: {
+    field: FieldInputProps<string>;
+    form: {
+      setFieldValue: (
+        field: string,
+        value: any,
+        shouldValidate?: boolean
+      ) => Promise<void>;
+      setFieldTouched: (
+        field: string,
+        isTouched?: boolean,
+        shouldValidate?: boolean
+      ) => Promise<void>;
+    };
+    options: IExercise[];
+    onDeleteExercise: (exercise: any) => Promise<void>;
+    createExercise: (data: any) => Promise<void>;
   }) => {
     const { name, value, onChange } = field;
     const { setFieldValue, setFieldTouched } = form;
 
-    const handleExerciseClick = async (selectedOption) => {
-      console.log('Exercise clicked:', selectedOption);
-
+    const handleExerciseClick = async (selectedOption: IExercise) => {
       try {
         // Parse field path to get indices
         const pathPieces = name.split('.');
@@ -90,7 +112,8 @@ vi.mock('./ExerciseSearch', () => ({
           name={name}
           value={value || ''}
           onChange={onChange}
-          placeholder={placeholder || 'Add Exercise'}
+          // placeholder={placeholder || 'Add Exercise'}
+          placeholder="Add Exercise"
           autoComplete="off"
         />
 
@@ -221,7 +244,9 @@ describe('New Workout Form', () => {
     fireEvent.click(exerciseOption);
 
     await waitFor(() => {
-      const exerciseInput = screen.getByTestId('exercise-search');
+      const exerciseInput = screen.getByTestId(
+        'exercise-search'
+      ) as HTMLInputElement;
       expect(exerciseInput.value).toBe('Bulgarian Split Squat');
     });
 
