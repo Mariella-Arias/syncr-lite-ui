@@ -1,11 +1,16 @@
 /**
  * @vitest-environment jsdom
  */
+// External Dependencies
 import { describe, test, vi, expect, beforeEach } from 'vitest';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+
+// UI Components
 import CreateWorkoutModal from './CreateWorkoutModal';
+
+// Redux
 import workoutsReducer from '../workoutsSlice';
 
 vi.mock('./CreateWorkoutForm', () => ({
