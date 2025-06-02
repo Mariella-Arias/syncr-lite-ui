@@ -55,7 +55,6 @@ function App() {
         containerClassName=""
         containerStyle={{}}
         toastOptions={{
-          // Define default options
           className: '',
           duration: 5000,
           removeDelay: 1000,
@@ -64,7 +63,6 @@ function App() {
             color: '#fff',
           },
 
-          // Default options for specific types
           success: {
             duration: 3000,
             iconTheme: {
