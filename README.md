@@ -15,7 +15,7 @@ A React-based frontend for the Syncr Lite application, providing an intuitive us
 
 ## Overview
 
-This application serves as the frontend for Syncr Lite, a comprehensive workout tracking platform. It provides a responsive and intuitive interface for users to create, manage, and track their workout routines.
+This application serves as the frontend for Syncr Lite, a workout tracking platform. It provides a responsive and intuitive interface for users to create, manage, and track their workout routines.
 
 ## Features
 
@@ -37,14 +37,13 @@ This application serves as the frontend for Syncr Lite, a comprehensive workout 
 
   - Calendar-based scheduling
   - Drag-and-drop interface
-  - Weekly and monthly views
+  - Weekly calendar views
   - Rescheduling functionality
 
 - **Activity Tracking**
 
   - Workout completion tracking
   - Historical workout data
-  - Filter by date ranges
   - Consistency metrics
 
 - **Responsive Design**
@@ -58,6 +57,7 @@ This application serves as the frontend for Syncr Lite, a comprehensive workout 
 - **State Management**: Redux
 - **Styling**: Tailwind CSS
 - **HTTP Client**: Axios
+- **Testing**: Vitest + React Testing Library
 - **Containerization**: Docker & Docker Compose
 - **Development Server**: Vite dev server
 - **Node Version**: 20.x
