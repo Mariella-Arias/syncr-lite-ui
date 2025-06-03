@@ -56,7 +56,7 @@ const authApi = {
    * @param data Current password for account deletion confirmation
    */
   deleteAccount: async (data: IDeleteAccountFormData) => {
-    const response = await api.delete('auth/users/me/', data);
+    const response = await api.delete('auth/users/delete/', data);
     return response;
   },
 
