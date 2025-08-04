@@ -54,7 +54,7 @@ jobs:
       # create prod environment file
       - name: Set environment variables
         run: |
-          echo "VITE_API_URL=https://mariella-arias.github.io/syncr-lite-ui/" > .env.production
+          echo "VITE_API_URL=https://syncr-lite-api.onrender.com" > .env.production
       # run Vite build process to create static files
       - name: Build
         run: npm run build
