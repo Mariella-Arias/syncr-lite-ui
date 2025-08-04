@@ -1,5 +1,5 @@
 # Workflow for testing and deploying static content to GitHub Pages
-name: Test and Deploy to Pages
+name: Build, Test, and Deploy to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -39,26 +39,34 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      # download repository code to the Github VM
       - name: Checkout
         uses: actions/checkout@v4
+      # install Node and set up npm caching for faster build
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
+      # install project dependencies from package.json
       - name: Install dependencies
         run: npm ci
+      # create prod environment file
       - name: Set environment variables
         run: |
-          echo "VITE_API_URL=https://syncr-lite-api.onrender.com" > .env.production
+          echo "VITE_API_URL=https://mariella-arias.github.io/syncr-lite-ui/" > .env.production
+      # run Vite build process to create static files
       - name: Build
         run: npm run build
+      # configure Github Pages deployment
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      # package the ./dist folder and upload as deployment artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
+      # deploy uploaded artifact to Github Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
