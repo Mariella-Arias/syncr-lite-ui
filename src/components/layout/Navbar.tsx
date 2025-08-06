@@ -11,9 +11,6 @@ import { useDispatch } from 'react-redux';
 import DeleteAccountModal from '../../features/auth/components/DeleteAccountModal';
 import ChangePasswordModal from '../../features/auth/components/ChangePasswordModal';
 
-// Assets
-import logo from '../../assets/logo.png';
-
 // Redux
 import { AppDispatch } from '../../app/store';
 import { auth } from '../../features/auth/authSlice';
@@ -80,18 +77,17 @@ const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <div className="w-full p-2 flex flex-wrap md:flex-nowrap items-center justify-between ">
+    <div className="w-full p-2 flex flex-wrap md:flex-nowrap items-center justify-between bg-red-550">
       {/* Logo Container */}
       <Link
         to="/"
-        className="flex items-center"
+        className="flex items-center gap-1"
       >
         {/* Application Logo */}
-        <img
-          src={logo}
-          className="w-40 h-10 md:w-48 md:h-12 transition duration-300 ease-in-out object-contain"
-          alt="Logo"
-        />
+        <p className="text-5xl text-white font-outfit leading-tight flex items-center transform -translate-y-1">
+          syncr
+        </p>
+        <div className="bg-[#fbbf24] w-2 h-2 rounded-full"></div>
       </Link>
 
       {/* Navigation Links */}
@@ -101,7 +97,9 @@ const Navbar = () => {
           <Link
             to="/"
             className={`text-2xl hover:font-semibold ${
-              location.pathname === '/' ? 'font-semibold' : ''
+              location.pathname === '/'
+                ? 'font-bold text-white'
+                : 'text-[#F3F2F2]'
             }`}
           >
             DASHBOARD
@@ -111,7 +109,9 @@ const Navbar = () => {
           <Link
             to="/planner"
             className={`text-2xl hover:font-semibold ${
-              location.pathname === '/planner' ? 'font-semibold' : ''
+              location.pathname === '/planner'
+                ? 'font-bold text-white'
+                : 'text-[#F3F2F2]'
             }`}
           >
             PLANNER
@@ -121,7 +121,9 @@ const Navbar = () => {
           <Link
             to="/activity"
             className={`text-2xl hover:font-semibold ${
-              location.pathname === '/activity' ? 'font-semibold' : ''
+              location.pathname === '/activity'
+                ? 'font-bold text-white'
+                : 'text-[#F3F2F2]'
             }`}
           >
             ACTIVITY
@@ -130,40 +132,38 @@ const Navbar = () => {
       </div>
 
       {/* User Settings Dropdown */}
-      <div className="relative">
-        <div
-          onClick={() => {
-            setIsOpen((prev) => !prev);
-          }}
-          className={`bg-[#F3F2F2] p-3 flex items-center gap-2 md:gap-3 cursor-pointer ${
-            isOpen ? 'shadow-md' : ''
-          }`}
-        >
-          {/* User Icon */}
-          <User
+      <div
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+        }}
+        className={`relative bg-white p-3 flex items-center gap-2 md:gap-3 cursor-pointer rounded-[10px] ${
+          isOpen ? 'shadow-md' : ''
+        }`}
+      >
+        {/* User Icon */}
+        <User
+          strokeWidth={1.5}
+          className="text-[#9CA3AF] hidden md:block"
+        />
+
+        {/* User Email */}
+        <p>{user?.email}</p>
+
+        {/* Toggle Chevron Icons */}
+        {!isOpen && (
+          <ChevronDown
+            className="text-[#9CA3AF]"
             strokeWidth={1.5}
-            className="text-[#9CA3AF] hidden md:block"
+            size={20}
           />
-
-          {/* User Email */}
-          <p>{user?.email}</p>
-
-          {/* Toggle Chevron Icons */}
-          {!isOpen && (
-            <ChevronDown
-              className="text-[#9CA3AF]"
-              strokeWidth={1.5}
-              size={20}
-            />
-          )}
-          {isOpen && (
-            <ChevronUp
-              className="text-[#9CA3AF]"
-              strokeWidth={1.5}
-              size={20}
-            />
-          )}
-        </div>
+        )}
+        {isOpen && (
+          <ChevronUp
+            className="text-[#9CA3AF]"
+            strokeWidth={1.5}
+            size={20}
+          />
+        )}
         {/* Render dropdown when open */}
         {isOpen && <UserSettings menuRef={menuRef} />}
       </div>
@@ -191,7 +191,7 @@ const UserSettings = ({ menuRef }: UserSettingsProps) => {
   return (
     <div
       ref={menuRef}
-      className="bg-white rounded-b-[10px] shadow-md p-3 absolute top-full left-0 w-full flex flex-col z-50"
+      className="bg-white rounded-b-[10px] shadow-md p-3 absolute top-full left-0 w-full flex flex-col z-50 transform -translate-y-2"
     >
       {/* Logout Option */}
       <div

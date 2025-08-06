@@ -3,6 +3,7 @@
 @theme {
   --font-sans: 'Barlow', system-ui, sans-serif;
   --font-nunito: 'Nunito Sans', sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
 
   --color-red-550: rgb(235, 51, 35, 100);
   --color-red-hover: rgb(205, 64, 52, 100);
